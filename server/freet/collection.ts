@@ -2,6 +2,8 @@ import type {HydratedDocument, Types} from 'mongoose';
 import type {Freet} from './model';
 import FreetModel from './model';
 import UserCollection from '../user/collection';
+import LikeCollection from '../like/collection';
+import CommentCollection from '../comment/collection';
 
 /**
  * This files contains a class that has the functionality to explore freets
@@ -28,7 +30,7 @@ class FreetCollection {
       dateModified: date
     });
     await freet.save(); // Saves freet to MongoDB
-    return freet.populate('authorId');
+    return freet.populate(['authorId', 'numLikes']);
   }
 
   /**
@@ -38,7 +40,7 @@ class FreetCollection {
    * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
    */
   static async findOne(freetId: Types.ObjectId | string): Promise<HydratedDocument<Freet>> {
-    return FreetModel.findOne({_id: freetId}).populate('authorId');
+    return FreetModel.findOne({_id: freetId}).populate(['authorId', 'numLikes']);
   }
 
   /**
@@ -48,7 +50,7 @@ class FreetCollection {
    */
   static async findAll(): Promise<Array<HydratedDocument<Freet>>> {
     // Retrieves freets and sorts them from most to least recent
-    return FreetModel.find({}).sort({dateModified: -1}).populate('authorId');
+    return FreetModel.find({}).sort({dateModified: -1}).populate(['authorId', 'numLikes']);
   }
 
   /**
@@ -59,7 +61,17 @@ class FreetCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Freet>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate('authorId');
+    return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate(['authorId', 'numLikes']);
+  }
+
+  /**
+   * Get all the freets by given users in the given author array
+   *
+   * @param {string[]} authorIds - An array of ids of freet authors
+   * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+   */
+   static async findAllByAuthorIds(userIds: Array<Types.ObjectId | string>): Promise<Array<HydratedDocument<Freet>>> {
+    return FreetModel.find({authorId: {$in: userIds}}).sort({dateModified: -1}).populate(['authorId', 'numLikes']);
   }
 
   /**
@@ -74,7 +86,7 @@ class FreetCollection {
     freet.content = content;
     freet.dateModified = new Date();
     await freet.save();
-    return freet.populate('authorId');
+    return freet.populate(['authorId', 'numLikes']);
   }
 
   /**
@@ -94,7 +106,17 @@ class FreetCollection {
    * @param {string} authorId - The id of author of freets
    */
   static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
+    const freets = await FreetModel.find({authorId});
+    const promises = [];
+
+    for (const freet of freets) {
+      promises.push(LikeCollection.deleteManyByObjectId(freet._id, 'Freet'));
+      promises.push(CommentCollection.deleteManyByFreetId(freet._id));
+    }
+
+    await Promise.all(promises);
     await FreetModel.deleteMany({authorId});
+    
   }
 }
 
