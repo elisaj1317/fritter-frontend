@@ -48,6 +48,14 @@
     >
       {{ freet.content }}
     </p>
+    <p class="likes">
+      Likes: {{freet.numLikes}}
+      <LikeButton
+      :isFreet="true"
+      :objectId="freet._id"
+      :shouldRefreshFreets="shouldRefreshFreets"
+      />
+    </p>
     <p class="info">
       Posted at {{ freet.dateModified }}
       <i v-if="freet.edited">(edited)</i>
@@ -65,20 +73,24 @@
 </template>
 
 <script>
+import LikeButton from '@/components/Like/LikeButton.vue';
+
 export default {
   name: 'FreetComponent',
+  components: {LikeButton},
   props: {
     // Data from the stored freet
     freet: {
       type: Object,
       required: true
-    }
+    },
+    shouldRefreshFreets: Boolean
   },
   data() {
     return {
       editing: false, // Whether or not this freet is in edit mode
       draft: this.freet.content, // Potentially-new content for this freet
-      alerts: {} // Displays success/error messages encountered during freet modification
+      alerts: {}, // Displays success/error messages encountered during freet modification
     };
   },
   methods: {

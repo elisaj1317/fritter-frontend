@@ -1,4 +1,4 @@
-<!-- Default page that also displays freets -->
+<!-- Default page that also displays freets user has liked-->
 
 <template>
   <main>
@@ -6,7 +6,6 @@
       <header>
         <h2>Welcome @{{ $store.state.username }}</h2>
       </header>
-      <CreateFreetForm />
     </section>
     <section v-else>
       <header>
@@ -17,43 +16,36 @@
           <router-link to="/login">
             Sign in
           </router-link>
-          to create, edit, and delete freets.
+          to view your liked freets.
         </h3>
       </article>
     </section>
-    <section>
+    <section v-if="$store.state.username">
       <header>
         <div class="left">
           <h2>
-            Viewing all freets
-            <span v-if="$store.state.filter">
-              by @{{ $store.state.filter }}
-            </span>
+            Viewing liked freets
           </h2>
-        </div>
-        <div class="right">
-          <GetFreetsForm
-            ref="getFreetsForm"
-            value="author"
-            placeholder="🔍 Filter by author (optional)"
-            button="🔄 Get freets"
-          />
         </div>
       </header>
       <section
-        v-if="$store.state.freets.length"
+        v-if="$store.state.likedFreets.length"
       >
         <FreetComponent
-          v-for="freet in $store.state.freets"
+          v-for="freet in $store.state.likedFreets"
           :key="freet._id"
           :freet="freet"
-          :shouldRefreshFreets="true"
+          :shouldRefreshFreets="false"
         />
       </section>
       <article
         v-else
       >
-        <h3>No freets found.</h3>
+        <h3>No liked freets found. Go to 
+            <router-link to="/">
+              Home
+            </router-link>
+            to start liking freets.</h3>
       </article>
     </section>
   </main>
@@ -61,14 +53,14 @@
 
 <script>
 import FreetComponent from '@/components/Freet/FreetComponent.vue';
-import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
-import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
 
 export default {
-  name: 'FreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm},
+  name: 'LikePage',
+  components: {FreetComponent},
   mounted() {
-    this.$refs.getFreetsForm.submit();
+    if (this.$store.state.username) {
+        this.$store.commit('refreshLikes');
+    }
   }
 };
 </script>

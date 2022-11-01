@@ -11,6 +11,10 @@ export default {
   },
   methods: {
     async submit() {
+      if (this.$store.state.username) {
+        this.$store.commit('refreshLikes');
+      }
+
       const url = this.value ? `/api/freets?author=${this.value}` : '/api/freets';
       try {
         const r = await fetch(url);

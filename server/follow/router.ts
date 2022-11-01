@@ -91,7 +91,7 @@ router.put(
   '/:username?',
   [
     userValidator.isUserLoggedIn,
-    userValidator.isUserParamsExists,
+    userValidator.isUserExists,
     followValidator.isFollowOneself,
     followValidator.isRepeatFollow
   ],
@@ -119,7 +119,7 @@ router.delete(
   '/:username?',
   [
     userValidator.isUserLoggedIn,
-    userValidator.isUserParamsExists,
+    userValidator.isUserExists,
     followValidator.isFollowExists
   ],
   async (req: Request, res: Response) => {
