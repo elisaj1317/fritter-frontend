@@ -58,7 +58,7 @@
     </p>
     <p class="info">
       Posted at {{ freet.dateModified }}
-      <i v-if="freet.edited">(edited)</i>
+      <i v-if="freet.dateModified !== freet.dateCreated">(edited)</i>
     </p>
     <section class="alerts">
       <article
@@ -166,7 +166,7 @@ export default {
         }
 
         this.editing = false;
-        this.$store.commit('refreshFreets');
+        this.$store.dispatch('refreshFreets');
 
         params.callback();
       } catch (e) {

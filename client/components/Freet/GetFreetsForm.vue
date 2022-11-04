@@ -12,7 +12,7 @@ export default {
   methods: {
     async submit() {
       if (this.$store.state.username) {
-        this.$store.commit('refreshLikes');
+        this.$store.dispatch('refreshLikes');
       }
 
       const url = this.value ? `/api/freets?author=${this.value}` : '/api/freets';
@@ -31,7 +31,7 @@ export default {
           // change their username when you refresh
           this.$store.commit('updateFilter', null);
           this.value = ''; // Clear filter to show all users' freets
-          this.$store.commit('refreshFreets');
+          this.$store.dispatch('refreshFreets');
         } else {
           // Otherwise reset to previous fitler
           this.value = this.$store.state.filter;

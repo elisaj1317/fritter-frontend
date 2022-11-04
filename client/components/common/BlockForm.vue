@@ -100,7 +100,7 @@ export default {
         }
 
         if (this.refreshFreets) {
-          this.$store.commit('refreshFreets');
+          this.$store.dispatch('refreshFreets');
         }
 
         if (this.callback) {

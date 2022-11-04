@@ -46,21 +46,30 @@ const store = new Vuex.Store({
        */
       state.freets = freets;
     },
-    async refreshFreets(state) {
+    updateLikes(state, likes) {
+      /**
+       * Update the stored liked freets to the freets liked by current user.
+       * @param likes - Freets liked by current user
+       */
+      state.likedFreets = likes;
+    }
+  },
+  actions: {
+    async refreshFreets({commit, state}) {
       /**
        * Request the server for the currently available freets.
        */
-      const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
+      const url = state.filter ? `/api/freets?author=${state.filter}` : '/api/freets';
       const res = await fetch(url).then(async r => r.json());
-      state.freets = res;
+      commit('updateFreets', res);
     },
-    async refreshLikes(state) {
+    async refreshLikes({commit}) {
       /**
        * Request the server for the liked freets of current user.
        */
       const url = '/api/likes/freets';
       const res = await fetch(url).then(async r => r.json());
-      state.likedFreets = res;
+      commit('updateLikes', res);
     }
   },
   // Store data across page refreshes, only discard on browser close

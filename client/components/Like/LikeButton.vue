@@ -52,10 +52,10 @@ export default {
                     throw new Error(res.error);
                 }
 
-                this.$store.commit('refreshLikes');
+                this.$store.dispatch('refreshLikes');
 
                 if (this.shouldRefreshFreets) {
-                    this.$store.commit('refreshFreets');
+                    this.$store.dispatch('refreshFreets');
                 }
 
             } catch (e) {

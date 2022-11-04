@@ -8,6 +8,7 @@
       </header>
       <CreateFreetForm />
     </section>
+
     <section v-else>
       <header>
         <h2>Welcome to Fritter!</h2>
@@ -21,6 +22,7 @@
         </h3>
       </article>
     </section>
+
     <section>
       <header>
         <div class="left">
@@ -40,6 +42,7 @@
           />
         </div>
       </header>
+
       <section
         v-if="$store.state.freets.length"
       >
@@ -50,12 +53,14 @@
           :shouldRefreshFreets="true"
         />
       </section>
+      
       <article
         v-else
       >
         <h3>No freets found.</h3>
       </article>
     </section>
+
   </main>
 </template>
 
