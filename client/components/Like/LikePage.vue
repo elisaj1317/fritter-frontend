@@ -35,7 +35,6 @@
           v-for="freet in $store.state.likedFreets"
           :key="freet._id"
           :freet="freet"
-          :shouldRefreshFreets="false"
         />
       </section>
       <article

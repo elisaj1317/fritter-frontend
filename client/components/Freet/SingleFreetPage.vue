@@ -9,7 +9,7 @@
       <FreetComponent
       :key="freet._id"
       :freet="freet"
-      :shouldRefreshFreets="true"
+      :hideCommentButton="true"
       />
     </section>
     
@@ -65,15 +65,6 @@ export default {
     async fetchFreetData() { 
       this.freet = null;
       this.loadingFreets = true;
-
-      if (!this.$store.state.filter && this.$store.state.freets.length > 0) { 
-        const freetsWithId = this.$store.state.freets.filter(freet => freet._id == this.$route.params.freetId);
-        if (freetsWithId.length > 0) {
-          this.freet = freetsWithId[0];
-          this.loadingFreets = false;
-          return;
-        }
-      }
       
       const freetUrl = `api/freets/${this.$route.params.freetId}`;
       try {

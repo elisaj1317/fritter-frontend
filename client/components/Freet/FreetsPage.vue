@@ -50,7 +50,6 @@
           v-for="freet in $store.state.freets"
           :key="freet._id"
           :freet="freet"
-          :shouldRefreshFreets="true"
         />
       </section>
       

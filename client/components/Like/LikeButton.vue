@@ -24,10 +24,6 @@ export default {
             type: String,
             required: true
         },
-        shouldRefreshFreets: { // true if freets in store should be refreshed on action
-            type: Boolean,
-            required: true
-        }
     },
     data() {
         return {alerts: {}};
@@ -63,15 +59,16 @@ export default {
                     throw new Error(res.error);
                 }
 
-                if (this.shouldRefreshFreets) {
-                    this.$store.dispatch('refreshFreets'); // refreshes freets in store
+                if (this.canLike) {
+                    this.numLikes += 1;
+                } else {
+                    this.numLikes -= 1;
                 }
 
-                if (!this.isFreet) {
-                    this.$emit('refreshComments'); // tells parent component to refresh comments
-                    this.$store.dispatch('refreshLikedComments'); // refreshed likedComments in store
+                if (this.isFreet) {
+                    this.$store.dispatch('refreshLikedFreets');
                 } else {
-                    this.$store.dispatch('refreshLikedFreets'); // refreshes likedFreets in store
+                    this.$store.dispatch('refreshLikedComments');
                 }
 
             } catch (e) {

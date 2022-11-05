@@ -14,10 +14,6 @@ export default {
         freetId: {
             type: String,
             required: true
-        },
-        shouldRefreshFreets: {
-            type: Boolean,
-            required: true
         }
     },
     data() {

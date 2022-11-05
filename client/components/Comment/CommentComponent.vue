@@ -55,7 +55,6 @@
         :numLikes="comment.numLikes"
         :isFreet="false"
         :objectId="comment._id"
-        :shouldRefreshFreets="false"
       /> 
     </section>
     <p class="info">

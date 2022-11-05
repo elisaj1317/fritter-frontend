@@ -48,18 +48,17 @@
     >
       {{ freet.content }}
     </p>
-    <section class="likes">
+    <span class="actions">
       <LikeButton
         :numLikes="freet.numLikes"
         :isFreet="true"
         :objectId="freet._id"
-        :shouldRefreshFreets="shouldRefreshFreets"
       /> 
       <CommentButton 
+        v-if="!hideCommentButton"
         :freetId="freet._id"
-        :shouldRefreshFreets="shouldRefreshFreets"
       />
-    </section>
+    </span>
     <p class="info">
       Posted at {{ freet.dateModified }}
       <i v-if="freet.dateModified !== freet.dateCreated">(edited)</i>
@@ -90,7 +89,10 @@ export default {
       type: Object,
       required: true
     },
-    shouldRefreshFreets: Boolean
+    hideCommentButton: {
+      type: Boolean,
+      required: false
+    }
   },
   data() {
     return {
