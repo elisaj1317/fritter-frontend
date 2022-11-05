@@ -59,7 +59,7 @@ export default {
   components: {FreetComponent},
   mounted() {
     if (this.$store.state.username) {
-        this.$store.dispatch('refreshLikes');
+        this.$store.dispatch('refreshLikedFreets');
     }
   }
 };

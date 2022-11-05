@@ -12,7 +12,7 @@ export default {
   methods: {
     async submit() {
       if (this.$store.state.username) {
-        this.$store.dispatch('refreshLikes');
+        this.$store.dispatch('refreshLikedFreets');
       }
 
       const url = this.value ? `/api/freets?author=${this.value}` : '/api/freets';

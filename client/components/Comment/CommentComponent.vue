@@ -1,16 +1,16 @@
-<!-- Reusable component representing a single freet and its actions -->
+<!-- Reusable component representing a single comment and its actions -->
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
   <article
-    class="freet"
+    class="comment"
   >
     <header>
       <h3 class="author">
-        @{{ freet.author }}
+        @{{ comment.author }}
       </h3>
       <div
-        v-if="$store.state.username === freet.author"
+        v-if="$store.state.username === comment.author"
         class="actions"
       >
         <button
@@ -31,11 +31,12 @@
         >
           ✏️ Edit
         </button>
-        <button @click="deleteFreet">
+        <button @click="deleteComment">
           🗑️ Delete
         </button>
       </div>
     </header>
+
     <textarea
       v-if="editing"
       class="content"
@@ -46,23 +47,20 @@
       v-else
       class="content"
     >
-      {{ freet.content }}
+      {{ comment.content }}
     </p>
     <section class="likes">
       <LikeButton
-        :numLikes="freet.numLikes"
-        :isFreet="true"
-        :objectId="freet._id"
-        :shouldRefreshFreets="shouldRefreshFreets"
+        @refreshComments="$emit('refreshComments')"
+        :numLikes="comment.numLikes"
+        :isFreet="false"
+        :objectId="comment._id"
+        :shouldRefreshFreets="false"
       /> 
-      <CommentButton 
-        :freetId="freet._id"
-        :shouldRefreshFreets="shouldRefreshFreets"
-      />
     </section>
     <p class="info">
-      Posted at {{ freet.dateModified }}
-      <i v-if="freet.dateModified !== freet.dateCreated">(edited)</i>
+      Posted at {{ comment.dateModified }}
+      <i v-if="comment.dateModified !== comment.dateCreated">(edited)</i>
     </p>
     <section class="alerts">
       <article
@@ -78,51 +76,48 @@
 
 <script>
 import LikeButton from '@/components/Like/LikeButton.vue';
-import CommentButton from '@/components/Comment/CommentButton.vue';
-
 
 export default {
-  name: 'FreetComponent',
-  components: {LikeButton, CommentButton},
+  name: 'CommentComponent',
+  components: {LikeButton},
   props: {
-    // Data from the stored freet
-    freet: {
+    // Data from the stored comment
+    comment: {
       type: Object,
       required: true
     },
-    shouldRefreshFreets: Boolean
   },
   data() {
     return {
-      editing: false, // Whether or not this freet is in edit mode
-      draft: this.freet.content, // Potentially-new content for this freet
-      alerts: {}, // Displays success/error messages encountered during freet modification
+      editing: false, // Whether or not this comment is in edit mode
+      draft: this.comment.content, // Potentially-new content for this comment
+      alerts: {}, // Displays success/error messages encountered during comment modification
     };
   },
   methods: {
     startEditing() {
       /**
-       * Enables edit mode on this freet.
+       * Enables edit mode on this comment.
        */
-      this.editing = true; // Keeps track of if a freet is being edited
-      this.draft = this.freet.content; // The content of our current "draft" while being edited
+      this.editing = true; // Keeps track of if a comment is being edited
+      this.draft = this.comment.content; // The content of our current "draft" while being edited
     },
     stopEditing() {
       /**
-       * Disables edit mode on this freet.
+       * Disables edit mode on this frcommenteet.
        */
       this.editing = false;
-      this.draft = this.freet.content;
+      this.draft = this.comment.content;
     },
-    deleteFreet() {
+    deleteComment() {
       /**
-       * Deletes this freet.
+       * Deletes this comment.
        */
       const params = {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted freet!', status: 'success'
+            message: 'Successfully deleted comment!', status: 'success'
           });
         }
       };
@@ -130,18 +125,18 @@ export default {
     },
     submitEdit() {
       /**
-       * Updates freet to have the submitted draft content.
+       * Updates comment to have the submitted draft content.
        */
-      if (this.freet.content === this.draft) {
-        const error = 'Error: Edited freet content should be different than current freet content.';
+      if (this.comment.content === this.draft) {
+        const error = 'Error: Edited comment content should be different than current comment content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
       }
 
       const params = {
-        method: 'PATCH',
-        message: 'Successfully edited freet!',
+        method: 'PUT',
+        message: 'Successfully edited comment!',
         body: JSON.stringify({content: this.draft}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
@@ -152,7 +147,7 @@ export default {
     },
     async request(params) {
       /**
-       * Submits a request to the freet's endpoint
+       * Submits a request to the comment's endpoint
        * @param params - Options for the request
        * @param params.body - Body for the request, if it exists
        * @param params.callback - Function to run if the the request succeeds
@@ -165,14 +160,15 @@ export default {
       }
 
       try {
-        const r = await fetch(`/api/freets/${this.freet._id}`, options);
+        const r = await fetch(`/api/comments/${this.freet._id}`, options);
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
         }
 
         this.editing = false;
-        this.$store.dispatch('refreshFreets');
+        
+        this.$emit("refreshComments");
 
         params.callback();
       } catch (e) {
@@ -185,7 +181,7 @@ export default {
 </script>
 
 <style scoped>
-.freet {
+.comment {
     border: 1px solid #111;
     padding: 20px;
     position: relative;

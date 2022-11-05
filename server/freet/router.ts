@@ -51,6 +51,23 @@ router.get(
 );
 
 /**
+ * Get freet given a specific freetId
+ * @return {FreetResponse[]} - A freet
+ * @throws {404} - If no freet has given freetId
+ */
+router.get(
+  '/:freetId',
+  [
+    freetValidator.isFreetExists
+  ],
+  async (req: Request, res: Response) => {
+    const freet = await FreetCollection.findOne(req.params.freetId);
+    const response = [freet].map(util.constructFreetResponse);
+    res.status(200).json(response[0]);
+  }
+);
+
+/**
  * Create a new freet.
  *
  * @name POST /api/freets

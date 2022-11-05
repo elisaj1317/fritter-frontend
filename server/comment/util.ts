@@ -47,6 +47,28 @@ const constructCommentResponse = (comment: HydratedDocument<Comment>): CommentRe
   };
 };
 
+/**
+ * Transform Comment object into an object
+ * with all the information needed by the frontend
+ *
+ * @param {Freet} freet - A freet
+ * @returns {FreetResponse} - The freet object formatted for the frontend
+ */
+ const constructCommentResponseFromPopulatedComment = (comment: PopulatedComment): CommentResponse => {
+  const {username} = comment.authorId;
+  return {
+    _id: comment._id.toString(),
+    author: username,
+    content: comment.content,
+    category: comment.category,
+    commentOn: comment.commentOn._id.toString(),
+    dateCreated: formatDate(comment.dateCreated),
+    dateModified: formatDate(comment.dateModified),
+    numLikes: comment.numLikes
+  };
+};
+
 export {
-  constructCommentResponse
+  constructCommentResponse,
+  constructCommentResponseFromPopulatedComment
 };

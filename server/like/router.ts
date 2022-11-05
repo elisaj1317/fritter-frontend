@@ -7,6 +7,7 @@ import * as commentValidator from '../comment/middleware';
 import * as likeValidator from '../like/middleware';
 import * as util from './util';
 import * as freetUtil from '../freet/util';
+import * as commentUtil from '../comment/util';
 
 const router = express.Router();
 
@@ -26,8 +27,30 @@ router.get(
   async (req: Request, res: Response) => {
     const curUserId = (req.session.userId as string) ?? '';
     const likes = await LikeCollection.findAllLikesByIdAndDoc(curUserId, 'Freet');
-    const likedPosts = likes.map(util.getPopulatedFreetFromLike);
+    const likedPosts = likes.map(util.getPopulatedCommentFromLike);
     const response = likedPosts.map(freetUtil.constructFreetResponseFromPopulatedFreet);
+    res.status(200).json(response);
+  }
+);
+
+/**
+ * Get current user's liked comments
+ *
+ * @name GET /api/likes/comments
+ *
+ * @returns {CommentResponse[]} - A list of all liked comments of the user by date liked
+ * @throws {403} - If the user is not logged in
+ */
+ router.get(
+  '/comments',
+  [
+    userValidator.isUserLoggedIn
+  ],
+  async (req: Request, res: Response) => {
+    const curUserId = (req.session.userId as string) ?? '';
+    const likes = await LikeCollection.findAllLikesByIdAndDoc(curUserId, 'Comment');
+    const likedPosts = likes.map(util.getPopulatedCommentFromLike);
+    const response = likedPosts.map(commentUtil.constructCommentResponseFromPopulatedComment);
     res.status(200).json(response);
   }
 );

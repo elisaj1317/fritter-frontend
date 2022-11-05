@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     filter: null, // Username to filter shown freets by (null = show all)
     freets: [], // All freets created in the app
     likedFreets: [], // All freets liked by current user
+    likedComments: [], // All comments liked by current user
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
@@ -46,12 +47,19 @@ const store = new Vuex.Store({
        */
       state.freets = freets;
     },
-    updateLikes(state, likes) {
+    updateLikedFreets(state, likes) {
       /**
        * Update the stored liked freets to the freets liked by current user.
        * @param likes - Freets liked by current user
        */
       state.likedFreets = likes;
+    },
+    updateLikedComments(state, likes) {
+      /**
+       * Update the stored liked comments to the comments liked by current user.
+       * @param likes - Comments liked by current user
+       */
+      state.likedComments = likes;
     }
   },
   actions: {
@@ -63,13 +71,21 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async r => r.json());
       commit('updateFreets', res);
     },
-    async refreshLikes({commit}) {
+    async refreshLikedFreets({commit}) {
       /**
        * Request the server for the liked freets of current user.
        */
       const url = '/api/likes/freets';
       const res = await fetch(url).then(async r => r.json());
-      commit('updateLikes', res);
+      commit('updateLikedFreets', res);
+    },
+    async refreshLikedComments({commit}) {
+      /**
+       * Request the server for the liked comments of current user.
+       */
+      const url = '/api/likes/comments';
+      const res = await fetch(url).then(async r => r.json());
+      commit('updateLikedComments', res);
     }
   },
   // Store data across page refreshes, only discard on browser close

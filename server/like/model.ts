@@ -2,6 +2,7 @@ import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
 import type {User} from '../user/model';
 import type {PopulatedFreet} from '../freet/model';
+import { PopulatedComment } from 'server/comment/model';
 
 export type objectsToLike = 'Freet' | 'Comment';
 
@@ -18,6 +19,13 @@ export type PopulatedFreetLike = {
   liker: User;
   likedObject: PopulatedFreet;
   docModel: 'Freet';
+};
+
+export type PopulatedCommentLike = {
+  _id: Types.ObjectId;
+  liker: User;
+  likedObject: PopulatedComment;
+  docModel: 'Comment';
 };
 
 const LikeSchema = new Schema({

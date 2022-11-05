@@ -1,31 +1,45 @@
 <!-- Component for liking freets/comments (inline style) -->
 <template>
-    <div>
+    <span>
         <button type="submit" @click="submit">
             {{ buttonText }}
         </button>
-        <article
-            v-for="(status, alert, index) in alerts"
-            :key="index"
-            :class="status"
-        >
-            <p>{{ alert }}</p>
-        </article>
-      </div>
+        <span> {{ numLikes }} </span>
+    </span>
 </template>
 
 <script>
 export default {
     name: 'LikeButton',
-    props: ['isFreet', 'objectId', 'shouldRefreshFreets'],
+    props: {
+        numLikes: { // number of likes on an object
+            type: Number,
+            required: true
+        },
+        isFreet: { // true if object being liked is a freet, false if it is comment
+            type: Boolean,
+            required: true
+        },
+        objectId: { // objectId of freet or comment
+            type: String,
+            required: true
+        },
+        shouldRefreshFreets: { // true if freets in store should be refreshed on action
+            type: Boolean,
+            required: true
+        }
+    },
     data() {
         return {alerts: {}};
     },
     computed: {
         canLike() {
-            return !(this.$store.state.likedFreets.filter(liked => liked._id == this.objectId).length > 0);
+            if (this.isFreet) {
+                return !(this.$store.state.likedFreets.filter(liked => liked._id == this.objectId).length > 0);
+            }
+            return !(this.$store.state.likedComments.filter(liked => liked._id == this.objectId).length > 0);
         },
-        buttonText() {
+        buttonText() { // determines text based on canLike
             if (this.canLike) {
                 return "Like";
             } 
@@ -35,14 +49,11 @@ export default {
     methods: {
         async submit() {
             const url = this.isFreet ? `/api/likes/freet/${this.objectId}` : `/api/likes/comment/${this.objectId}`;
-            let msg = '';
             const options = {};
             if (this.canLike) {
                 options.method = 'PUT';
-                msg = 'Successfully liked!'
             } else {
                 options.method = 'DELETE';
-                msg = 'Successfully unliked!'
             }
             
             try {
@@ -52,10 +63,15 @@ export default {
                     throw new Error(res.error);
                 }
 
-                this.$store.dispatch('refreshLikes');
-
                 if (this.shouldRefreshFreets) {
-                    this.$store.dispatch('refreshFreets');
+                    this.$store.dispatch('refreshFreets'); // refreshes freets in store
+                }
+
+                if (!this.isFreet) {
+                    this.$emit('refreshComments'); // tells parent component to refresh comments
+                    this.$store.dispatch('refreshLikedComments'); // refreshed likedComments in store
+                } else {
+                    this.$store.dispatch('refreshLikedFreets'); // refreshes likedFreets in store
                 }
 
             } catch (e) {
