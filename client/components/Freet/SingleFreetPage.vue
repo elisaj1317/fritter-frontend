@@ -7,9 +7,9 @@
         <h2>Freet</h2>
       </header>
       <FreetComponent
-      :key="freet._id"
-      :freet="freet"
-      :hideCommentButton="true"
+        :key="freet._id"
+        :freet="freet"
+        :hideCommentButton="true"
       />
     </section>
 
@@ -17,10 +17,10 @@
       <header>
         <h2>Write a Comment:</h2>
       </header>
-      <CreateCommentForm 
+      <CreateCommentForm
         :freetId="freet._id"
         @refreshComments="fetchCommentData"
-        />
+      />
     </section>
 
     <section v-if="comments.length">
@@ -35,22 +35,27 @@
       />
     </section>
     <section v-else>
-      <p> No comments found </p>
+      <p>No comments found</p>
     </section>
-    
   </main>
 </template>
 
 <script>
-import FreetComponent from '@/components/Freet/FreetComponent.vue';
-import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
-import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
-import CommentComponent from '@/components/Comment/CommentComponent.vue';
-import CreateCommentForm from '@/components/Comment/CreateCommentForm.vue';
+import FreetComponent from "@/components/Freet/FreetComponent.vue";
+import CreateFreetForm from "@/components/Freet/CreateFreetForm.vue";
+import GetFreetsForm from "@/components/Freet/GetFreetsForm.vue";
+import CommentComponent from "@/components/Comment/CommentComponent.vue";
+import CreateCommentForm from "@/components/Comment/CreateCommentForm.vue";
 
 export default {
-  name: 'SingleFreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm, CommentComponent, CreateCommentForm},
+  name: "SingleFreetPage",
+  components: {
+    FreetComponent,
+    GetFreetsForm,
+    CreateFreetForm,
+    CommentComponent,
+    CreateCommentForm,
+  },
   data() {
     return {
       loadingFreets: false,
@@ -58,26 +63,25 @@ export default {
       freet: null,
       comments: [],
       alerts: {},
-    }
+    };
   },
   created() {
-    this.$store.dispatch('refreshLikedComments');
+    this.$store.dispatch("refreshLikedComments");
 
     this.$watch(
       () => this.$route.params,
       () => {
         this.freet = null;
         this.comments = [];
-        this.fetchFreetData(),
-        this.fetchCommentData()
+        this.fetchFreetData(), this.fetchCommentData();
       },
-      { immediate: true}
-    )
+      { immediate: true }
+    );
   },
   methods: {
-    async fetchFreetData() { 
+    async fetchFreetData() {
       this.loadingFreets = true;
-      
+
       const freetUrl = `api/freets/${this.$route.params.freetId}`;
       try {
         const r = await fetch(freetUrl);
@@ -88,7 +92,7 @@ export default {
         this.freet = res;
         this.loadingFreets = false;
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         this.loadingFreets = false;
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
@@ -107,12 +111,12 @@ export default {
         this.comments = res;
         this.loadingComments = false;
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         this.loadingComments = false;
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -122,14 +126,15 @@ section {
   flex-direction: column;
 }
 
-header, header > * {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header,
+header > * {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 section .scrollbox {

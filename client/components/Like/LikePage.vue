@@ -13,9 +13,7 @@
       </header>
       <article>
         <h3>
-          <router-link to="/login">
-            Sign in
-          </router-link>
+          <router-link to="/login"> Sign in </router-link>
           to view your liked freets.
         </h3>
       </article>
@@ -23,44 +21,38 @@
     <section v-if="$store.state.username">
       <header>
         <div class="left">
-          <h2>
-            Viewing liked freets
-          </h2>
+          <h2>Viewing liked freets</h2>
         </div>
       </header>
-      <section
-        v-if="$store.state.likedFreets.length"
-      >
+      <section v-if="$store.state.likedFreets.length">
         <FreetComponent
           v-for="freet in $store.state.likedFreets"
           :key="freet._id"
           :freet="freet"
         />
       </section>
-      <article
-        v-else
-      >
-        <h3>No liked freets found. Go to 
-            <router-link to="/">
-              Home
-            </router-link>
-            to start liking freets.</h3>
+      <article v-else>
+        <h3>
+          No liked freets found. Go to
+          <router-link to="/"> Home </router-link>
+          to start liking freets.
+        </h3>
       </article>
     </section>
   </main>
 </template>
 
 <script>
-import FreetComponent from '@/components/Freet/FreetComponent.vue';
+import FreetComponent from "@/components/Freet/FreetComponent.vue";
 
 export default {
-  name: 'LikePage',
-  components: {FreetComponent},
+  name: "LikePage",
+  components: { FreetComponent },
   mounted() {
     if (this.$store.state.username) {
-        this.$store.dispatch('refreshLikedFreets');
+      this.$store.dispatch("refreshLikedFreets");
     }
-  }
+  },
 };
 </script>
 
@@ -70,14 +62,15 @@ section {
   flex-direction: column;
 }
 
-header, header > * {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header,
+header > * {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 section .scrollbox {

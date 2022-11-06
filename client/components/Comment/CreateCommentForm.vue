@@ -18,7 +18,7 @@
         >
           <img :src="value" :alt="key" @click="chosenCategory = index" />
         </span>
-        </div>
+      </div>
     </div>
 
     <button type="submit">Create Comment</button>
