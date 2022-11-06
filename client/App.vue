@@ -39,7 +39,7 @@ body {
   display: flex;
   padding: 0;
   margin: 0;
-  font-size: 1.2em;
+  background-color: #f4fce3;
 }
 
 main {
