@@ -11,12 +11,12 @@
       <label for="category">Category:</label>
       <div class="category-buttons">
         <span
-          v-for="(value, key, index) in categories"
+          v-for="(value, key) in categories"
           :key="key"
           class="reaction"
-          :class="{ active: index === chosenCategory }"
+          :class="{ active: key === chosenCategory }"
         >
-          <img :src="value" :alt="key" @click="chosenCategory = index" />
+          <img :src="value.src" :alt="key" @click="chosenCategory = key" />
         </span>
       </div>
     </div>
@@ -43,18 +43,15 @@ export default {
       type: String,
       required: true,
     },
+    categories: {
+      type: Object,
+      required: true,
+    }
   },
   data() {
     return {
       content: "",
       alerts: {},
-      categories: {
-        happy: "https://www.svgrepo.com/show/209064/happy-emoji.svg",
-        love: "https://www.svgrepo.com/show/209105/in-love-emoji.svg",
-        sad: "https://www.svgrepo.com/show/209093/crying-emoji.svg",
-        angry: "https://www.svgrepo.com/show/209074/angry-emoji.svg",
-        suspicious: "https://www.svgrepo.com/show/209095/suspicious-emoji.svg",
-      },
       chosenCategory: null,
     };
   },
@@ -71,7 +68,7 @@ export default {
         credentials: "same-origin",
         body: JSON.stringify({
           content: this.content,
-          category: "" + this.chosenCategory,
+          category: "" + this.categories[this.chosenCategory].index,
         }),
       };
 
@@ -101,8 +98,8 @@ export default {
 
 <style scoped>
 img {
-  width: 50px;
-  height: 50px;
+  width: 2.5em;
+  height: 2.5em;
 }
 form {
   border: 1px solid #111;

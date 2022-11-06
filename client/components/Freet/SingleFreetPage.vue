@@ -2,41 +2,51 @@
 
 <template>
   <main>
-    <section v-if="freet">
-      <header>
-        <h2>Freet</h2>
-      </header>
-      <FreetComponent
-        :key="freet._id"
-        :freet="freet"
-        :hideCommentButton="true"
-      />
-    </section>
+    <div v-if="freet">
+      <section>
+        <header>
+          <h2>Freet</h2>
+        </header>
+        <FreetComponent
+          :key="freet._id"
+          :freet="freet"
+          :hideCommentButton="true"
+        />
+      </section>
 
-    <section v-if="$store.state.username && freet">
-      <header>
-        <h2>Write a Comment:</h2>
-      </header>
-      <CreateCommentForm
-        :freetId="freet._id"
-        @refreshComments="fetchCommentData"
-      />
-    </section>
+      <section v-if="$store.state.username">
+        <header>
+          <h2>Write a Comment:</h2>
+        </header>
+        <CreateCommentForm
+          :freetId="freet._id"
+          :categories="commentCategories"
+          @refreshComments="fetchCommentData"
+        />
+      </section>
 
-    <section v-if="comments.length">
-      <header>
-        <h2>Viewing all Comments</h2>
-      </header>
-      <CommentComponent
-        v-for="comment in comments"
-        v-on:refreshComments="fetchCommentData"
-        :key="comment._id"
-        :comment="comment"
-      />
-    </section>
-    <section v-else>
-      <p>No comments found</p>
-    </section>
+      <section v-if="comments.length">
+        <header>
+          <h2 v-if="!chosenCategoriesIdx.length">Viewing all Comments:</h2>
+          <h2 v-else>Viewing Filtered Comments:</h2>
+          <CommentFilters :categories="commentCategories" @updatedFilter="filterComments"/>
+        </header>
+        <div v-for="comment in comments" :key="comment._id">
+          <CommentComponent
+            v-if="!chosenCategoriesIdx.length || chosenCategoriesIdx.includes(comment.category)"
+            v-on:refreshComments="fetchCommentData"
+            :comment="comment"
+            :categories="commentCategories"
+          />
+        </div>
+      </section>
+      <section v-else>
+        <p>No comments found</p>
+      </section>
+    </div>
+    <div v-else>
+      <h2>Freet not found</h2>
+    </div>
   </main>
 </template>
 
@@ -46,6 +56,7 @@ import CreateFreetForm from "@/components/Freet/CreateFreetForm.vue";
 import GetFreetsForm from "@/components/Freet/GetFreetsForm.vue";
 import CommentComponent from "@/components/Comment/CommentComponent.vue";
 import CreateCommentForm from "@/components/Comment/CreateCommentForm.vue";
+import CommentFilters from "@/components/Comment/CommentFilters.vue";
 
 export default {
   name: "SingleFreetPage",
@@ -55,13 +66,22 @@ export default {
     CreateFreetForm,
     CommentComponent,
     CreateCommentForm,
+    CommentFilters,
   },
   data() {
     return {
       loadingFreets: false,
       loadingComments: false,
       freet: null,
+      commentCategories: {
+        happy: {src: "https://www.svgrepo.com/show/209064/happy-emoji.svg", index: 0},
+        love: {src: "https://www.svgrepo.com/show/209105/in-love-emoji.svg", index: 1},
+        sad: {src: "https://www.svgrepo.com/show/209093/crying-emoji.svg", index: 2},
+        angry: {src: "https://www.svgrepo.com/show/209074/angry-emoji.svg", index: 3},
+        suspicious: {src: "https://www.svgrepo.com/show/209095/suspicious-emoji.svg", index: 4},
+      },
       comments: [],
+      chosenCategoriesIdx: [],
       alerts: {},
     };
   },
@@ -79,6 +99,9 @@ export default {
     );
   },
   methods: {
+    filterComments(chosenCategoriesIdx) {
+      this.chosenCategoriesIdx = chosenCategoriesIdx;
+    },
     async fetchFreetData() {
       this.loadingFreets = true;
 

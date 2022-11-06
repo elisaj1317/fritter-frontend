@@ -4,7 +4,10 @@
 <template>
   <article class="comment">
     <header>
-      <h3 class="author">@{{ comment.author }}</h3>
+      <div class="author-category">
+        <img :src="categories[categoryKey].src" :alt="categoryKey" />
+        <h3 class="author">@{{ comment.author }}</h3>
+      </div>
       <div v-if="$store.state.username === comment.author" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>
         <button v-if="editing" @click="stopEditing">🚫 Discard changes</button>
@@ -58,13 +61,26 @@ export default {
       type: Object,
       required: true,
     },
+    categories: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
       editing: false, // Whether or not this comment is in edit mode
-      draft: this.comment.content, // Potentially-new content for this comment
+      draft: this.comment.content, // Potentially-new content for this comment,
       alerts: {}, // Displays success/error messages encountered during comment modification
     };
+  },
+  computed: {
+    categoryKey() {
+      for (const [key, value] of Object.entries(this.categories)) {
+        if (value.index == this.comment.category) {
+          return key;
+        }
+      }
+    },
   },
   methods: {
     startEditing() {
@@ -156,6 +172,17 @@ export default {
 </script>
 
 <style scoped>
+.author-category {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+img {
+  width: 2.5em;
+  height: 2.5em;
+}
+
 .comment {
   border: 1px solid #111;
   padding: 20px;
