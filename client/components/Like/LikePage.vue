@@ -13,7 +13,7 @@
       </header>
       <article>
         <h3>
-          <router-link to="/login"> Sign in </router-link>
+          <router-link to="/login">Sign in</router-link>
           to view your liked freets.
         </h3>
       </article>
@@ -34,7 +34,7 @@
       <article v-else>
         <h3>
           No liked freets found. Go to
-          <router-link to="/"> Home </router-link>
+          <router-link to="/">Home</router-link>
           to start liking freets.
         </h3>
       </article>

@@ -15,7 +15,7 @@
       </header>
       <article>
         <h3>
-          <router-link to="/login"> Sign in </router-link>
+          <router-link to="/login">Sign in</router-link>
           to create, edit, and delete freets.
         </h3>
       </article>
