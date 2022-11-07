@@ -4,13 +4,24 @@
   <article class="user">
     <h3 class="author">@{{ username }}</h3>
 
-    <div v-if="!loadingFollowers && !loadingFollowings && !Object.keys(alerts).length">
+    <div
+      v-if="
+        !loadingFollowers && !loadingFollowings && !Object.keys(alerts).length
+      "
+    >
       <FollowButton
         v-if="username !== $store.state.username"
         @refreshFollowers="fetchFollowers"
         :username="username"
         :canFollow="canFollow()"
       />
+
+      <router-link :to="{ path: `/user/${username}/followers` }"
+        >{{followers.length}} Followers</router-link
+      >
+      <router-link :to="{ path: `/user/${username}/followings` }"
+        >{{followings.length}} Following</router-link
+      >
     </div>
     <div v-else-if="loadingFollowers || loadingFollowings">
       <h4>Loading user details</h4>
@@ -40,7 +51,7 @@ export default {
       loadingFollowers: true,
       followings: [],
       followers: [],
-      alerts: {}
+      alerts: {},
     };
   },
   created() {

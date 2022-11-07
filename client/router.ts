@@ -4,6 +4,8 @@ import FreetsPage from './components/Freet/FreetsPage.vue';
 import SingleFreetPage from './components/Freet/SingleFreetPage.vue';
 import LikePage from './components/Like/LikePage.vue';
 import UserProfilePage from './components/User/UserProfilePage.vue';
+import UserFollowings from './components/User/UserFollowings.vue';
+import UserFollowers from './components/User/UserFollowers.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
@@ -17,6 +19,8 @@ const routes = [
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '/freet/:freetId', name:'Freet', component: SingleFreetPage},
   {path: '/user/:user', name:'UserProfilePage', component: UserProfilePage},
+  {path: '/user/:user/followings', name:'UserFollowings', component: UserFollowings},
+  {path: '/user/:user/followers', name:'UserFollowers', component: UserFollowers},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
 
