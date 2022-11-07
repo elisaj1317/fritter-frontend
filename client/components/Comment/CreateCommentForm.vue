@@ -10,14 +10,15 @@
     <div>
       <label for="category">Category:</label>
       <div class="category-buttons">
-        <span
+        <CategoryIcon 
           v-for="(value, key) in categories"
           :key="key"
-          class="reaction"
-          :class="{ active: key === chosenCategory }"
-        >
-          <img :src="value.src" :alt="key" @click="chosenCategory = key" />
-        </span>
+          :src="value.src"
+          :alt="key"
+          :isSelectable="true"
+          :isActive="key === chosenCategory"
+          @click="chosenCategory=key"
+        />
       </div>
     </div>
 
@@ -36,8 +37,11 @@
 </template>
 
 <script>
+import CategoryIcon from "@/components/Comment/CategoryIcon.vue";
+
 export default {
   name: "CreateCommentForm",
+  components: {CategoryIcon},
   props: {
     freetId: {
       type: String,
@@ -97,10 +101,7 @@ export default {
 </script>
 
 <style scoped>
-img {
-  width: 2.5em;
-  height: 2.5em;
-}
+
 form {
   border: 1px solid #111;
   padding: 0.5rem;
@@ -132,18 +133,4 @@ form > * {
   margin-top: 0.3em;
 }
 
-.reaction {
-  user-select: none;
-  display: flex;
-  padding: 0.3em;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.reaction:hover:not(.active) {
-  background-color: #74c0fc;
-}
-.active {
-  background-color: #228be6;
-}
 </style>

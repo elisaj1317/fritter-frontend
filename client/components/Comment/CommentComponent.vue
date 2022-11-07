@@ -5,8 +5,16 @@
   <article class="comment">
     <header>
       <div class="author-category">
-        <img :src="categories[categoryKey].src" :alt="categoryKey" />
-        <h3 class="author"><router-link :to="{path:`/user/${comment.author}`}">@{{ comment.author }}</router-link></h3>
+        <CategoryIcon
+          :src="categories[categoryKey].src"
+          :alt="categoryKey"
+          :isSelectable="false"
+        />
+        <h3 class="author">
+          <router-link :to="{ path: `/user/${comment.author}` }"
+            >@{{ comment.author }}</router-link
+          >
+        </h3>
       </div>
       <div v-if="$store.state.username === comment.author" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>
@@ -50,10 +58,11 @@
 
 <script>
 import LikeButton from "@/components/Like/LikeButton.vue";
+import CategoryIcon from "@/components/Comment/CategoryIcon.vue";
 
 export default {
   name: "CommentComponent",
-  components: { LikeButton },
+  components: { LikeButton, CategoryIcon },
   props: {
     // Data from the stored comment
     comment: {
@@ -175,11 +184,6 @@ export default {
   display: flex;
   gap: 0.5em;
   align-items: center;
-}
-
-img {
-  width: 2.5em;
-  height: 2.5em;
 }
 
 .comment {
