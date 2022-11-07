@@ -7,7 +7,7 @@
         <header>
           <h2>@{{ $route.params.user }}'s Profile</h2>
         </header>
-        <UserComponent :username="$route.params.user" />
+        <UserComponent :username="$route.params.user" :showFollowData="true"/>
       </section>
 
       <section>

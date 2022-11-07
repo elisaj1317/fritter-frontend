@@ -4,7 +4,7 @@
   <main>
     <h2>{{ title }}</h2>
     <div v-if="users.length">
-      <UserComponent v-for="user in users" :key="user" :username="user" />
+      <UserComponent v-for="user in users" :key="user" :username="user" :showFollowData="false"/>
     </div>
     <div v-else-if="loading">
       <h3>Loading...</h3>

@@ -2,7 +2,8 @@
 
 <template>
   <article class="user">
-    <h3 class="author">@{{ username }}</h3>
+    <h3 v-if="showFollowData" class="author">@{{ username }}</h3>
+    <h3 v-else class="author"><router-link :to="{ path: `/user/${username}`}">@{{username}}</router-link></h3>
 
     <div
       v-if="
@@ -10,16 +11,16 @@
       "
     >
       <FollowButton
-        v-if="username !== $store.state.username"
+        v-if="$store.state.username && (username !== $store.state.username)"
         @refreshFollowers="fetchFollowers"
         :username="username"
         :canFollow="canFollow()"
       />
 
-      <router-link :to="{ path: `/user/${username}/followers` }"
+      <router-link v-if="showFollowData" :to="{ path: `/user/${username}/followers` }"
         >{{followers.length}} Followers</router-link
       >
-      <router-link :to="{ path: `/user/${username}/followings` }"
+      <router-link v-if="showFollowData" :to="{ path: `/user/${username}/followings` }"
         >{{followings.length}} Following</router-link
       >
     </div>
@@ -44,18 +45,27 @@ export default {
       type: String,
       required: true,
     },
+    showFollowData: {
+      type: Boolean,
+      required: true,
+    }
   },
   data() {
     return {
-      loadingFollowings: true,
-      loadingFollowers: true,
+      loadingFollowings: false,
+      loadingFollowers: false,
       followings: [],
       followers: [],
       alerts: {},
     };
   },
   created() {
-    this.fetchFollowings();
+    if (this.showFollowData) {
+      this.loadingFollowings = true;
+      this.fetchFollowings();
+    }
+
+    this.loadingFollowers = true;
     this.fetchFollowers();
   },
   methods: {
@@ -67,8 +77,6 @@ export default {
       );
     },
     async fetchFollowings() {
-      this.loadingFollowings = true;
-
       const url = `api/follows?followee=${this.username}`;
       try {
         const r = await fetch(url);
@@ -85,8 +93,6 @@ export default {
       }
     },
     async fetchFollowers() {
-      this.loadingFollowers = true;
-
       const url = `api/follows?followed=${this.username}`;
       try {
         const r = await fetch(url);
