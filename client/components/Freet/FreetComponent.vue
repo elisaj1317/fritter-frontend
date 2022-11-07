@@ -4,7 +4,7 @@
 <template>
   <article class="freet">
     <header>
-      <h3 class="author"><router-link :to="{path:`/user/${freet.author}`}">@{{ freet.author }}</router-link></h3>
+      <UsernameComponent :username="freet.author" />
       <div v-if="$store.state.username === freet.author" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>
         <button v-if="editing" @click="stopEditing">🚫 Discard changes</button>
@@ -22,10 +22,7 @@
       {{ freet.content }}
     </p>
     <span class="actions">
-      <LikeButton
-        :likedObject="freet"
-        :isFreet="true"
-      />
+      <LikeButton :likedObject="freet" :isFreet="true" />
       <CommentButton v-if="!hideCommentButton" :freetId="freet._id" />
     </span>
     <p class="info">
@@ -47,10 +44,11 @@
 <script>
 import LikeButton from "@/components/Like/LikeButton.vue";
 import CommentButton from "@/components/Comment/CommentButton.vue";
+import UsernameComponent from "@/components/User/UsernameComponent.vue";
 
 export default {
   name: "FreetComponent",
-  components: { LikeButton, CommentButton },
+  components: { LikeButton, CommentButton, UsernameComponent },
   props: {
     // Data from the stored freet
     freet: {

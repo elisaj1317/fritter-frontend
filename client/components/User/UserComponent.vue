@@ -2,8 +2,7 @@
 
 <template>
   <article class="user">
-    <h3 v-if="showFollowData" class="author">@{{ username }}</h3>
-    <h3 v-else class="author"><router-link :to="{ path: `/user/${username}`}">@{{username}}</router-link></h3>
+    <UsernameComponent :username="username" />
 
     <div
       v-if="
@@ -34,11 +33,12 @@
 </template>
 
 <script>
-import FollowButton from "@/components/User/FollowButton.vue";
+import FollowButton from "@/components/Follow/FollowButton.vue";
+import UsernameComponent from "@/components/User/UsernameComponent.vue";
 
 export default {
   name: "UserComponent",
-  components: { FollowButton },
+  components: { FollowButton, UsernameComponent },
   props: {
     // Data from the stored freet
     username: {

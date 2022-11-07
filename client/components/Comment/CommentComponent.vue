@@ -10,11 +10,7 @@
           :alt="categoryKey"
           :isSelectable="false"
         />
-        <h3 class="author">
-          <router-link :to="{ path: `/user/${comment.author}` }"
-            >@{{ comment.author }}</router-link
-          >
-        </h3>
+        <UsernameComponent :username="comment.author" />
       </div>
       <div v-if="$store.state.username === comment.author" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>
@@ -59,10 +55,11 @@
 <script>
 import LikeButton from "@/components/Like/LikeButton.vue";
 import CategoryIcon from "@/components/Comment/CategoryIcon.vue";
+import UsernameComponent from "@/components/User/UsernameComponent.vue";
 
 export default {
   name: "CommentComponent",
-  components: { LikeButton, CategoryIcon },
+  components: { LikeButton, CategoryIcon, UsernameComponent },
   props: {
     // Data from the stored comment
     comment: {
