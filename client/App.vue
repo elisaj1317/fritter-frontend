@@ -2,6 +2,7 @@
   <div id="app">
     <header>
       <NavBar />
+      <CustomNav />
     </header>
     <router-view />
   </div>
@@ -9,10 +10,12 @@
 
 <script>
 import NavBar from '@/components/common/NavBar.vue';
+import CustomNav from '@/components/common/CustomNav.vue';
+
 
 export default {
   name: 'App',
-  components: {NavBar},
+  components: {NavBar, CustomNav},
   beforeCreate() {
     // Sync stored username to current session
     fetch('/api/users/session', {

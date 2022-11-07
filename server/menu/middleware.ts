@@ -4,13 +4,10 @@ import MenuCollection from './collection';
 
 
 const isUrlHelper = (url:string): boolean => {
-    try {
-        const new_url = new URL(url);
-    } catch {
-        return false;
+    if (url.length > 0 && url[0] == "/") {
+        return true;
     }
-
-    return true;
+    return false;
 }
 
 const isNameHelper = (name:string): boolean => {
@@ -35,7 +32,7 @@ const isValidMenuBody = async (req: Request, res: Response, next: NextFunction) 
 };
 
 /**
- * Checks if req.body contains valid url
+ * Checks if req.body contains a relative url (starts with /)
  */
 const isValidUrl = async (req: Request, res: Response, next: NextFunction) => {
     if(!isUrlHelper(req.body.url)) {
