@@ -9,7 +9,6 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
-    filter: null, // Username to filter shown freets by (null = show all)
     freets: [], // All freets created in the app
     likedFreets: [], // All freets liked by current user
     likedComments: [], // All comments liked by current user
@@ -32,13 +31,6 @@ const store = new Vuex.Store({
        * @param username - new username to set
        */
       state.username = username;
-    },
-    updateFilter(state, filter) {
-      /**
-       * Update the stored freets filter to the specified one.
-       * @param filter - Username of the user to fitler freets by
-       */
-      state.filter = filter;
     },
     updateFreets(state, freets) {
       /**
@@ -67,7 +59,7 @@ const store = new Vuex.Store({
       /**
        * Request the server for the currently available freets.
        */
-      const url = state.filter ? `/api/freets?author=${state.filter}` : '/api/freets';
+      const url = '/api/freets';
       const res = await fetch(url).then(async r => r.json());
       commit('updateFreets', res);
     },
