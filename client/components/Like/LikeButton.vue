@@ -1,10 +1,10 @@
 <!-- Component for liking freets/comments (inline style) -->
 <template>
-  <span>
+  <span v-if="$store.state.username">
     <button type="submit" @click="submit">
       {{ buttonText }}
     </button>
-    <span> {{ numLikes }} </span>
+    <span> {{ likedCopy.numLikes }} </span>
   </span>
 </template>
 
@@ -12,9 +12,9 @@
 export default {
   name: "LikeButton",
   props: {
-    numLikes: {
-      // number of likes on an object
-      type: Number,
+    likedObject: {
+      // object being liked
+      type: Object,
       required: true,
     },
     isFreet: {
@@ -22,33 +22,33 @@ export default {
       type: Boolean,
       required: true,
     },
-    objectId: {
-      // objectId of freet or comment
-      type: String,
-      required: true,
-    },
   },
   data() {
-    return { alerts: {} };
+    return {
+      justLiked: false, // no longer need to wait for like refresh to return for button to update
+      justUnliked: false, // no longer need to wait for like refresh to return for button to update
+      likedCopy: this.likedObject,
+      alerts: {},
+    };
   },
   computed: {
     canLike() {
       if (this.isFreet) {
         return !(
           this.$store.state.likedFreets.filter(
-            (liked) => liked._id == this.objectId
+            (liked) => liked._id == this.likedCopy._id
           ).length > 0
         );
       }
       return !(
         this.$store.state.likedComments.filter(
-          (liked) => liked._id == this.objectId
+          (liked) => liked._id == this.likedCopy._id
         ).length > 0
       );
     },
     buttonText() {
       // determines text based on canLike
-      if (this.canLike) {
+      if (this.justUnliked || (!this.justLiked && this.canLike)) {
         return "Like";
       }
       return "Unlike";
@@ -57,8 +57,9 @@ export default {
   methods: {
     async submit() {
       const url = this.isFreet
-        ? `/api/likes/freet/${this.objectId}`
-        : `/api/likes/comment/${this.objectId}`;
+        ? `/api/likes/freet/${this.likedCopy._id}`
+        : `/api/likes/comment/${this.likedCopy._id}`;
+
       const options = {};
       if (this.canLike) {
         options.method = "PUT";
@@ -74,9 +75,13 @@ export default {
         }
 
         if (this.canLike) {
-          this.numLikes += 1;
+          this.likedCopy.numLikes += 1;
+          this.justLiked = true;
+          this.justUnliked = false;
         } else {
-          this.numLikes -= 1;
+          this.likedCopy.numLikes -= 1;
+          this.justLiked = false;
+          this.justUnliked = true;
         }
 
         if (this.isFreet) {

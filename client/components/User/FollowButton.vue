@@ -23,12 +23,15 @@ export default {
     },
   },
   data() {
-    return { alerts: {} };
+    return { 
+      justFollowed: false, // no longer need to wait for refresh followers for button to update
+      justUnfollowed: false,  // no longer need to wait for refresh followers for button to update
+      alerts: {} };
   },
   computed: {
     buttonText() {
       // determines text based on canFollow
-      if (this.canFollow) {
+      if (this.justUnfollowed || (!this.justFollowed && this.canFollow)) {
         return "Follow";
       }
       return "Unfollow";
@@ -52,8 +55,15 @@ export default {
           throw new Error(res.error);
         }
 
+        if (this.canFollow) {
+          this.justFollowed = true;
+          this.justUnfollowed = false;
+        } else {
+          this.justFollowed = false;
+          this.justUnfollowed = true;
+        }
+
         this.$emit("refreshFollowers");
-        
       } catch (e) {
         this.$set(this.alerts, e, "error");
         setTimeout(() => this.$delete(this.alerts, e), 3000);

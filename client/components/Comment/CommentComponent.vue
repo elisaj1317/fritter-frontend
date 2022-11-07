@@ -28,9 +28,8 @@
     <section class="likes">
       <LikeButton
         @refreshComments="$emit('refreshComments')"
-        :numLikes="comment.numLikes"
+        :likedObject="comment"
         :isFreet="false"
-        :objectId="comment._id"
       />
     </section>
     <p class="info">

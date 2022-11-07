@@ -85,8 +85,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("refreshLikedComments");
-
+    
     this.$watch(
       () => this.$route.params,
       () => {

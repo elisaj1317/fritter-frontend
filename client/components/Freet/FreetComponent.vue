@@ -23,9 +23,8 @@
     </p>
     <span class="actions">
       <LikeButton
-        :numLikes="freet.numLikes"
+        :likedObject="freet"
         :isFreet="true"
-        :objectId="freet._id"
       />
       <CommentButton v-if="!hideCommentButton" :freetId="freet._id" />
     </span>
