@@ -6,7 +6,7 @@
     <header>
       <div class="author-category">
         <img :src="categories[categoryKey].src" :alt="categoryKey" />
-        <h3 class="author">@{{ comment.author }}</h3>
+        <h3 class="author"><router-link :to="{path:`/user/${comment.author}`}">@{{ comment.author }}</router-link></h3>
       </div>
       <div v-if="$store.state.username === comment.author" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>

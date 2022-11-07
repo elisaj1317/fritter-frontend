@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import FreetsPage from './components/Freet/FreetsPage.vue';
 import SingleFreetPage from './components/Freet/SingleFreetPage.vue';
 import LikePage from './components/Like/LikePage.vue';
+import UserPage from './components/User/UserPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
@@ -15,6 +16,7 @@ const routes = [
   {path: '/liked', name: 'Liked', component: LikePage},
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '/freet/:freetId', name:'Freet', component: SingleFreetPage},
+  {path: '/user/:user', name:'UserProfile', component: UserPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
 

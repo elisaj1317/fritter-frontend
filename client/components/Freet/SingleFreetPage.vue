@@ -44,6 +44,9 @@
         <p>No comments found</p>
       </section>
     </div>
+    <div v-else-if="loadingFreets || loadingComments">
+      <h2>Loading</h2>
+    </div>
     <div v-else>
       <h2>Freet not found</h2>
     </div>
@@ -52,8 +55,6 @@
 
 <script>
 import FreetComponent from "@/components/Freet/FreetComponent.vue";
-import CreateFreetForm from "@/components/Freet/CreateFreetForm.vue";
-import GetFreetsForm from "@/components/Freet/GetFreetsForm.vue";
 import CommentComponent from "@/components/Comment/CommentComponent.vue";
 import CreateCommentForm from "@/components/Comment/CreateCommentForm.vue";
 import CommentFilters from "@/components/Comment/CommentFilters.vue";
@@ -62,8 +63,6 @@ export default {
   name: "SingleFreetPage",
   components: {
     FreetComponent,
-    GetFreetsForm,
-    CreateFreetForm,
     CommentComponent,
     CreateCommentForm,
     CommentFilters,
@@ -117,7 +116,8 @@ export default {
       } catch (e) {
         this.$set(this.alerts, e, "error");
         this.loadingFreets = false;
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        console.log('here');
+        // setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
     async fetchCommentData() {
@@ -136,7 +136,7 @@ export default {
       } catch (e) {
         this.$set(this.alerts, e, "error");
         this.loadingComments = false;
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
+        // setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
   },
