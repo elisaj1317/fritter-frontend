@@ -74,6 +74,7 @@ body {
 
 main {
   padding: 0 5em 5em;
+  word-break: break-all
 }
 
 button {
