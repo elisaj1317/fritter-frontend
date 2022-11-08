@@ -2,35 +2,37 @@
 
 <template>
   <article class="user">
-    <UsernameComponent :username="username" />
-
-    <div
-      v-if="
-        !loadingFollowers && !loadingFollowings && !Object.keys(alerts).length
-      "
-    >
+    <div class="name-container">
+      <UsernameComponent :username="username" />
       <FollowButton
-        v-if="$store.state.username && username !== $store.state.username"
+        v-if="shouldShowFollowButton"
         @refreshFollowers="fetchFollowers"
         :username="username"
         :canFollow="canFollow()"
       />
+    </div>
 
+    <div
+      v-if="
+        showFollowData && !loadingFollowers && !loadingFollowings && !Object.keys(alerts).length
+      "
+      class="follow-data"
+    >
       <router-link
-        v-if="showFollowData"
         :to="{ path: `/user/${username}/followers` }"
+        class="data-router"
         >{{ followers.length }} Followers</router-link
       >
       <router-link
-        v-if="showFollowData"
         :to="{ path: `/user/${username}/followings` }"
+        class="data-router"
         >{{ followings.length }} Following</router-link
       >
     </div>
-    <div v-else-if="loadingFollowers || loadingFollowings">
+    <div v-else-if="showFollowData && (loadingFollowers || loadingFollowings)">
       <h4>Loading user details</h4>
     </div>
-    <div v-else>
+    <div v-else-if="showFollowData">
       <h4>User not found</h4>
     </div>
   </article>
@@ -62,6 +64,17 @@ export default {
       followers: [],
       alerts: {},
     };
+  },
+  computed: {
+    shouldShowFollowButton() {
+      return (
+        this.$store.state.username &&
+        this.username !== this.$store.state.username &&
+        !this.loadingFollowings &&
+        !this.loadingFollowers &&
+        !Object.keys(this.alerts).length
+      );
+    }
   },
   created() {
     if (this.showFollowData) {
@@ -115,6 +128,26 @@ export default {
 </script>
 
 <style scoped>
+.name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.follow-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 1.5em;
+}
+
+.data-router {
+  text-decoration: none;
+  color: #007991;
+  font-weight: bold;
+}
+
 .user {
   border: 1px solid #111;
   padding: 20px;

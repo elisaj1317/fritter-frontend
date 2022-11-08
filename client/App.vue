@@ -76,6 +76,11 @@ main {
   padding: 0 5em 5em;
 }
 
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
 .alerts {
   position: fixed;
   z-index: 99;
