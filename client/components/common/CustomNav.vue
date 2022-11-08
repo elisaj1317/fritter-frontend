@@ -42,7 +42,7 @@
         <img :src="buttonSrc" /><span>{{ buttonText }}</span>
       </button>
       <div class="add-title" v-else>
-        <input v-model="title" type="text" name="title" />
+        <input v-model="title" type="text" name="title" placeholder="Title"/>
         <div class="title-controls">
           <button @click="addRemoveFromMenu">Save</button>
           <button @click="addingTitle = false">Cancel</button>
