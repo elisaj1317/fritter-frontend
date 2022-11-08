@@ -5,7 +5,7 @@
     <div v-if="freet">
       <section>
         <header>
-          <h2>Freet</h2>
+          <h2>Freet:</h2>
         </header>
         <FreetComponent
           :key="freet._id"
@@ -16,7 +16,7 @@
 
       <section v-if="$store.state.username">
         <header>
-          <h2>Write a Comment:</h2>
+          <h2>Create a Comment:</h2>
         </header>
         <CreateCommentForm
           :freetId="freet._id"
@@ -27,8 +27,6 @@
 
       <section v-if="comments.length">
         <header>
-          <h2 v-if="!chosenCategoriesIdx.length">Viewing all Comments:</h2>
-          <h2 v-else>Viewing Filtered Comments:</h2>
           <CommentFilters :categories="commentCategories" @updatedFilter="filterComments"/>
         </header>
         <div v-for="comment in comments" :key="comment._id">
@@ -148,13 +146,6 @@ section {
   flex-direction: column;
 }
 
-header,
-header > * {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 button {
   margin-right: 10px;
 }
@@ -163,5 +154,9 @@ section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+}
+
+.filtered-title > *{
+  margin-bottom: 0em;
 }
 </style>

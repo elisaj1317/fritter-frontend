@@ -186,7 +186,7 @@ export default {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
-  margin: 0.5em;
+  margin: 0.5em 0em;
   background-color: #BCD8C1;
 
 }

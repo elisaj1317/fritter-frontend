@@ -1,7 +1,7 @@
 <!-- Component for commenting on freets -->
 <template>
   <span>
-    <button type="submit" @click="redirectToComments">Comment</button>
+    <img src="https://www.svgrepo.com/show/357540/comment.svg"  @click="redirectToComments" />
   </span>
 </template>
 
@@ -24,3 +24,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+span {
+  display: flex;
+  align-items: center;
+}
+
+img {
+  width: 1.5em;
+  height: 1.5em;
+  filter: invert(31%) sepia(43%) saturate(1863%) hue-rotate(155deg) brightness(100%) contrast(101%);
+  cursor: pointer;
+}
+</style>

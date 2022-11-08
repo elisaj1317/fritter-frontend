@@ -2,14 +2,14 @@
   <nav class="nav-bar menu-items">
     <router-link to="/" class="logo">
       <img src="../../public/logo.svg" />
-      <h1 class="title">Fritter</h1>
+      <h1>Fritter</h1>
     </router-link>
 
     <div class="standard-link" v-for="entry in standard" :key="entry.name">
       <router-link
         v-if="entry.show"
         :to="{ path: `${entry.url}` }"
-        class="menu-item"
+        :class="{ 'menu\-item': true, bold: $route.path == entry.url }"
         >{{ entry.name }}</router-link
       >
     </div>
@@ -24,7 +24,7 @@
       <span
         v-for="item in menu.entries"
         :key="item.name"
-        class="draggable-span"
+        :class="{'draggable\-span': true, bold: $route.path == item.url}"
       >
         <img
           src="https://www.svgrepo.com/show/357669/draggabledots.svg"
@@ -260,6 +260,12 @@ export default {
   border-radius: 2px;
 }
 
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -268,20 +274,18 @@ export default {
   color: black;
 }
 
-.title {
+h1 {
   font-size: 2em;
   margin: 0 5px;
 }
 
-.menu-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
+.menu-item {
+  text-decoration: none;
+  color: #007991;
+  font-size: 1.5em;
 }
 
-.menu-item, .add-remove > span {
-  text-decoration: none;
-  color: black;
+.add-remove > span {
   font-size: 1.5em;
 }
 
@@ -293,6 +297,10 @@ export default {
   display: flex;
   align-items: center;
   margin-left: -2em;
+}
+
+.draggable-span img {
+  filter: invert(31%) sepia(43%) saturate(1863%) hue-rotate(155deg) brightness(100%) contrast(101%);
 }
 
 img {
@@ -311,6 +319,10 @@ img {
   align-items: center;
   margin-left: -2.5em;
   padding: 0.5em;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 </style>

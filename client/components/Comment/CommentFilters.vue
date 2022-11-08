@@ -1,16 +1,18 @@
 <!-- Component for filtering comments -->
 <template>
   <div>
-    <h2>Filter by:</h2>
-    <CategoryIcon
-      v-for="(value, key) in categories"
-      :key="key"
-      :src="value.src"
-      :alt="key"
-      :isSelectable="true"
-      :isActive="chosenCategoriesIdx.includes(value.index)"
-      @click="clickOn(value.index)"
-    />
+    <h2>Filter Comments by:</h2>
+    <div class="reactions">
+      <CategoryIcon
+        v-for="(value, key) in categories"
+        :key="key"
+        :src="value.src"
+        :alt="key"
+        :isSelectable="true"
+        :isActive="chosenCategoriesIdx.includes(value.index)"
+        @click="clickOn(value.index)"
+      />
+    </div>
   </div>
 </template>
 
@@ -51,7 +53,12 @@ export default {
 
 div {
   display: flex;
-  gap: 0.5em;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reactions {
+  gap: 1em;
 }
 
 </style>

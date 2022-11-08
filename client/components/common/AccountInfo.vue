@@ -34,7 +34,7 @@ h1 {
 
 .menu-item {
   text-decoration: none;
-  color: black;
+  color: #007991;
   font-size: 1.5em;
 }
 

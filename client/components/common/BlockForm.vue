@@ -12,6 +12,7 @@
           :ref="field.id"
           :name="field.id"
           :value="field.value"
+          :placeholder="field.placeholder"
           @input="field.value = $event.target.value"
         />
         <input
@@ -20,6 +21,7 @@
           :type="field.id === 'password' ? 'password' : 'text'"
           :name="field.id"
           :value="field.value"
+          :placeholder="field.id"
           @input="field.value = $event.target.value"
         />
       </div>

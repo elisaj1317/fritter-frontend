@@ -161,7 +161,13 @@ export default {
   padding: 20px;
   position: relative;
   background-color: #BCD8C1;
-  margin: 0.5em;
+  margin: 0.5em 0em;
   background-color: #BCD8C1;
+}
+
+.actions {
+  display: flex;
+  align-content: center;
+  gap: 1em;
 }
 </style>

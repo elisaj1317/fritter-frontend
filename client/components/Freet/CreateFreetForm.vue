@@ -11,7 +11,7 @@ export default {
       url: "/api/freets",
       method: "POST",
       hasBody: true,
-      fields: [{ id: "content", label: "Content", value: "" }],
+      fields: [{ id: "content", label: "Content", value: "", placeholder: "How are you today?" }],
       title: "Create a freet",
       refreshFreets: true,
       callback: () => {

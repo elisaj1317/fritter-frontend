@@ -1,7 +1,7 @@
 <!-- Component representing username and route to user page -->
 
 <template>
-  <h3 class="username"><router-link :to="{path: `/user/${username}`}">@{{ username }}</router-link></h3>
+  <h3><router-link :to="{path: `/user/${username}`}" class="username">@{{ username }}</router-link></h3>
 </template>
 
 <script>
@@ -15,3 +15,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.username {
+  text-decoration: none;
+  color: #007991
+}
+
+</style>

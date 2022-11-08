@@ -4,7 +4,7 @@
   <form @submit.prevent="submit">
     <div>
       <label for="content">Content:</label>
-      <textarea name="content" v-model="content" />
+      <textarea name="content" v-model="content" placeholder="Leave a reply!"/>
     </div>
 
     <div>
