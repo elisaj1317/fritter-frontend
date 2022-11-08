@@ -111,22 +111,12 @@ form {
   margin-bottom: 14px;
   position: relative;
   background-color: #BCD8C1;
-
+  border-radius: 5px;
 }
 
 div {
   display: flex;
   flex-direction: column;
-}
-
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  width: 100%;
-  height: 6em;
-  padding: 0.5em;
-  border-radius: 4px;
-  resize: none;
 }
 
 form > * {

@@ -188,6 +188,7 @@ export default {
   position: relative;
   margin: 0.5em 0em;
   background-color: #BCD8C1;
+  border-radius: 5px;
 
 }
 </style>

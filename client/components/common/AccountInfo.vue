@@ -84,6 +84,7 @@ export default {
   align-items: center;
   border: 1px solid #111;
   background-color: #BCD8C1;
+  border-radius: 5px;
   margin: 0.5em 0em;
 }
 </style>

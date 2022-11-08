@@ -153,5 +153,6 @@ export default {
   padding: 20px;
   position: relative;
   background-color: #bcd8c1;
+  border-radius: 5px;
 }
 </style>

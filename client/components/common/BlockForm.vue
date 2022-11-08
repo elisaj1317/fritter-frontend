@@ -59,6 +59,9 @@ export default {
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission
+      title: '',
+      fields: [],
+      
     };
   },
   computed: {
@@ -141,7 +144,7 @@ form {
   margin-bottom: 14px;
   position: relative;
   background-color: #BCD8C1;
-
+  border-radius: 5px;
 }
 
 article > div {
@@ -160,16 +163,6 @@ form > * {
 
 form h3 {
   margin-top: 0;
-}
-
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  width: 100%;
-  height: 6em;
-  padding: 0.5em;
-  border-radius: 4px;
-  resize: none;
 }
 
 label {

@@ -81,6 +81,20 @@ button {
   font: inherit;
 }
 
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  height: 6em;
+  padding: 0.5em;
+  border-radius: 4px;
+  resize: none;
+}
+
+input {
+  font-family: inherit;
+}
+
 .alerts {
   position: fixed;
   z-index: 99;
