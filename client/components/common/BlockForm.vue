@@ -4,7 +4,7 @@
 <template>
   <form @submit.prevent="submit">
     <h3>{{ title }}</h3>
-    <article v-if="fields.length">
+    <article v-if="fields && fields.length">
       <div v-for="field in fields" :key="field.id">
         <label :for="field.id">{{ field.label }}:</label>
         <textarea
@@ -163,5 +163,14 @@ form h3 {
 textarea {
   font-family: inherit;
   font-size: inherit;
+  width: 100%;
+  height: 6em;
+  padding: 0.5em;
+  border-radius: 4px;
+  resize: none;
+}
+
+label {
+  margin-bottom: 0.25em;
 }
 </style>

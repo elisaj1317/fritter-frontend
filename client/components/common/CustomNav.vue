@@ -1,35 +1,54 @@
 <template>
   <nav class="nav-bar menu-items">
-    <div class="logo">
+    <router-link to="/" class="logo">
       <img src="../../public/logo.svg" />
       <h1 class="title">Fritter</h1>
-    </div>
+    </router-link>
 
     <div class="standard-link" v-for="entry in standard" :key="entry.name">
-      <router-link v-if="entry.show" :to="{ path: `${entry.url}` }" class="menu-item">{{
-        entry.name
-      }}</router-link>
+      <router-link
+        v-if="entry.show"
+        :to="{ path: `${entry.url}` }"
+        class="menu-item"
+        >{{ entry.name }}</router-link
+      >
     </div>
 
-    <draggable v-if="menu" :list="menu.entries" handle=".handle" class="menu-items" @end="updateLocations">
-      <span v-for="item in menu.entries" :key="item.name">
-        <i class="handle">icon</i>
+    <draggable
+      v-if="menu"
+      :list="menu.entries"
+      handle=".handle"
+      class="menu-items"
+      @end="updateLocations"
+    >
+      <span
+        v-for="item in menu.entries"
+        :key="item.name"
+        class="draggable-span"
+      >
+        <img
+          src="https://www.svgrepo.com/show/357669/draggabledots.svg"
+          class="handle"
+        />
         <router-link :to="{ path: `${item.url}` }" class="menu-item">{{
           item.name
         }}</router-link>
       </span>
     </draggable>
-    
+
     <div v-if="!isInStandard" class="adding-controls">
-      <button v-if="!addingTitle" @click="handleAddRemoveClick">{{ buttonText }}</button> <!-- Add/Remove from menu button -->
+      <button v-if="!addingTitle" @click="handleAddRemoveClick" class="add-remove">
+        <!-- Add/Remove from menu button -->
+        <img :src="buttonSrc" /><span>{{ buttonText }}</span>
+      </button>
       <div class="add-title" v-else>
-        <input v-model="title" type="text" name="title">
+        <input v-model="title" type="text" name="title" />
         <div class="title-controls">
-          <button @click="addRemoveFromMenu">Save</button> <button @click="addingTitle=false">Cancel</button>
+          <button @click="addRemoveFromMenu">Save</button>
+          <button @click="addingTitle = false">Cancel</button>
         </div>
       </div>
     </div>
-
   </nav>
 </template>
 
@@ -45,7 +64,7 @@ export default {
     return {
       menu: null,
       addingTitle: false,
-      title: '',
+      title: "",
     };
   },
   watch: {
@@ -91,7 +110,6 @@ export default {
       }
 
       return false;
-
     },
     pathPosition() {
       /**
@@ -115,6 +133,12 @@ export default {
       }
       return "Remove from Menu";
     },
+    buttonSrc() {
+      if (this.pathPosition == -1) {
+        return "https://www.svgrepo.com/show/99553/plus.svg";
+      }
+      return "https://www.svgrepo.com/show/45046/minus.svg";
+    }
   },
   created() {
     if (this.$store.state.username) {
@@ -126,7 +150,7 @@ export default {
       if (this.pathPosition == -1) {
         this.addingTitle = true;
       } else {
-        this.addRemoveFromMenu()
+        this.addRemoveFromMenu();
       }
     },
     async updateLocations(moved) {
@@ -134,15 +158,15 @@ export default {
         return;
       }
 
-      const url = '/api/menus';
+      const url = "/api/menus";
       const options = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin", // Sends express-session credentials with request
         body: JSON.stringify({
-          previousLocation: '' + moved.oldIndex,
-          newLocation: '' + moved.newIndex
-        })
+          previousLocation: "" + moved.oldIndex,
+          newLocation: "" + moved.newIndex,
+        }),
       };
 
       try {
@@ -151,7 +175,6 @@ export default {
           const res = await r.json();
           throw new Error(res.error);
         }
-
       } catch (e) {
         this.$store.commit("alert", {
           message: e,
@@ -239,6 +262,10 @@ export default {
 
 .logo {
   display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+  text-decoration: none;
+  color: black;
 }
 
 .title {
@@ -252,13 +279,38 @@ export default {
   gap: 0.5em;
 }
 
-.menu-item {
+.menu-item, .add-remove > span {
   text-decoration: none;
   color: black;
   font-size: 1.5em;
 }
 
-img {
-  height: 32px;
+.handle {
+  cursor: move;
 }
+
+.draggable-span {
+  display: flex;
+  align-items: center;
+  margin-left: -2em;
+}
+
+img {
+  height: 2em;
+  width: 2em;
+}
+
+.logo img {
+  height: 3em;
+  width: 3em;
+}
+
+.add-remove {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  margin-left: -2.5em;
+  padding: 0.5em;
+}
+
 </style>

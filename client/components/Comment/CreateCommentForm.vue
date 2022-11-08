@@ -122,6 +122,11 @@ div {
 textarea {
   font-family: inherit;
   font-size: inherit;
+  width: 100%;
+  height: 6em;
+  padding: 0.5em;
+  border-radius: 4px;
+  resize: none;
 }
 
 form > * {
@@ -131,7 +136,7 @@ form > * {
 .category-buttons {
   display: flex;
   flex-direction: row;
-  gap: 2em;
+  justify-content: space-between;
   margin-top: 0.3em;
 }
 
