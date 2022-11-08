@@ -24,7 +24,7 @@
       <span
         v-for="item in menu.entries"
         :key="item.name"
-        :class="{'draggable\-span': true, bold: $route.path == item.url}"
+        :class="{ 'draggable\-span': true, bold: $route.path == item.url }"
       >
         <img
           src="https://www.svgrepo.com/show/357669/draggabledots.svg"
@@ -37,14 +37,24 @@
     </draggable>
 
     <div v-if="!isInStandard && $store.state.username" class="adding-controls">
-      <button v-if="!addingTitle" @click="handleAddRemoveClick" class="add-remove">
+      <button
+        v-if="!addingTitle"
+        @click="handleAddRemoveClick"
+        class="add-remove"
+      >
         <!-- Add/Remove from menu button -->
         <img :src="buttonSrc" /><span>{{ buttonText }}</span>
       </button>
       <div class="add-title" v-else>
-        <input v-model="title" type="text" name="title" placeholder="Title"/>
+        <input
+          v-model="title"
+          ref="titleInput"
+          type="text"
+          name="title"
+          placeholder="Name"
+        />
         <div class="title-controls">
-          <button @click="addRemoveFromMenu">Save</button>
+          <button @click="handleSaveClick">Save</button>
           <button @click="addingTitle = false">Cancel</button>
         </div>
       </div>
@@ -75,6 +85,10 @@ export default {
         this.menu = null;
       }
     },
+    "$route.path": function() {
+      this.title = "";
+      this.addingTitle = false;
+    }
   },
   computed: {
     standard() {
@@ -138,7 +152,7 @@ export default {
         return "https://www.svgrepo.com/show/99553/plus.svg";
       }
       return "https://www.svgrepo.com/show/45046/minus.svg";
-    }
+    },
   },
   created() {
     if (this.$store.state.username) {
@@ -152,6 +166,53 @@ export default {
       } else {
         this.addRemoveFromMenu();
       }
+    },
+    handleSaveClick() {
+      if (!this.title.trim()) {
+        this.$refs.titleInput.focus();
+        this.$store.commit("alert", {
+          message:
+            "Error: The menu item name must be at least one character long.",
+          status: "error",
+        });
+        return;
+      }
+
+      for (const [index, item] of this.menu.entries.entries()) {
+        if (item.name == this.title) {
+          this.$refs.titleInput.focus();
+          this.$store.commit("alert", {
+            message: "Error: The menu item name must be unique.",
+            status: "error",
+          });
+          return;
+        }
+      }
+
+      for (const [index, item] of this.standard.entries()) {
+        if (item.name == this.title) {
+          this.$refs.titleInput.focus();
+          this.$store.commit("alert", {
+            message: "Error: The menu item name must be unique.",
+            status: "error",
+          });
+          return;
+        }
+      }
+
+      if (
+        this.title == "Your Profile" ||
+        this.title == "Account Settings" ||
+        this.title == "Login"
+      ) {
+        const error = "Error: The menu item name must be unique.";
+        this.$refs.titleInput.focus();
+        this.$set(this.alerts, error, "error");
+        setTimeout(() => this.$delete(this.alerts, error), 3000);
+        return;
+      }
+
+      this.addRemoveFromMenu();
     },
     async updateLocations(moved) {
       if (moved.oldIndex == moved.newIndex) {
@@ -300,7 +361,8 @@ h1 {
 }
 
 .draggable-span img {
-  filter: invert(31%) sepia(43%) saturate(1863%) hue-rotate(155deg) brightness(100%) contrast(101%);
+  filter: invert(31%) sepia(43%) saturate(1863%) hue-rotate(155deg)
+    brightness(100%) contrast(101%);
 }
 
 img {
@@ -324,5 +386,4 @@ img {
 .bold {
   font-weight: bold;
 }
-
 </style>
