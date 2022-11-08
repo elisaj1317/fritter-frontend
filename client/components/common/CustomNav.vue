@@ -36,7 +36,7 @@
       </span>
     </draggable>
 
-    <div v-if="!isInStandard" class="adding-controls">
+    <div v-if="!isInStandard && $store.state.username" class="adding-controls">
       <button v-if="!addingTitle" @click="handleAddRemoveClick" class="add-remove">
         <!-- Add/Remove from menu button -->
         <img :src="buttonSrc" /><span>{{ buttonText }}</span>
