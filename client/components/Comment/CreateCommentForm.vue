@@ -4,20 +4,20 @@
   <form @submit.prevent="submit">
     <div>
       <label for="content">Content:</label>
-      <textarea name="content" v-model="content" placeholder="Leave a reply!"/>
+      <textarea ref="content" name="content" v-model="content" placeholder="Leave a reply!" />
     </div>
 
     <div>
       <label for="category">Category:</label>
       <div class="category-buttons">
-        <CategoryIcon 
+        <CategoryIcon
           v-for="(value, key) in categories"
           :key="key"
           :src="value.src"
           :alt="key"
           :isSelectable="true"
           :isActive="key === chosenCategory"
-          @click="chosenCategory=key"
+          @click="chosenCategory = key"
         />
       </div>
     </div>
@@ -41,7 +41,7 @@ import CategoryIcon from "@/components/Comment/CategoryIcon.vue";
 
 export default {
   name: "CreateCommentForm",
-  components: {CategoryIcon},
+  components: { CategoryIcon },
   props: {
     freetId: {
       type: String,
@@ -50,7 +50,7 @@ export default {
     categories: {
       type: Object,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -60,10 +60,57 @@ export default {
     };
   },
   methods: {
+    isSuccess() {
+      // Error 400
+      if (!this.content.trim()) {
+        return {
+          message: "Error: Freet content must be at least one character long",
+          status: "error",
+          focus: () => {
+            this.$refs.content.focus();
+          },
+        };
+      }
+
+      // Error 413
+      if (this.content.length > 140) {
+        return {
+          message: "Error: Freet content must be no more than 140 characters.",
+          status: "error",
+          focus: () => {
+            this.$refs.content.focus();
+          },
+        };
+      }
+
+      if (this.chosenCategory == null) {
+        return {
+          message: "Error: Choose a category for your comment",
+          status: "error",
+        };
+      }
+
+      return {
+        message: "",
+        status: "success",
+        focus: () => {
+          return;
+        },
+      };
+    },
     async submit() {
       /**
        * Creates the comment with specified values
        */
+      const message = this.isSuccess();
+
+      if (message.status !== 'success') {
+        this.$set(this.alerts, message.message, message.status);
+        message.focus();
+        setTimeout(() => this.$delete(this.alerts, message.message), 3000);
+        return;
+      }
+
       const url = `/api/comments/${this.freetId}`;
 
       const options = {
@@ -101,7 +148,6 @@ export default {
 </script>
 
 <style scoped>
-
 form {
   border: 1px solid #111;
   padding: 0.5rem;
@@ -110,7 +156,7 @@ form {
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
-  background-color: #BCD8C1;
+  background-color: #bcd8c1;
   border-radius: 5px;
 }
 
@@ -129,5 +175,4 @@ form > * {
   justify-content: space-between;
   margin-top: 0.3em;
 }
-
 </style>
