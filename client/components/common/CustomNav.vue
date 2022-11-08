@@ -1,12 +1,12 @@
 <template>
-  <nav class="menu">
+  <nav class="nav-bar">
     <div class="logo">
       <img src="../../public/logo.svg" />
       <h1 class="title">Fritter</h1>
     </div>
 
     <div class="standard-link" v-for="entry in standard" :key="entry.name">
-      <router-link v-if="entry.show" :to="{ path: `${entry.url}` }">{{
+      <router-link v-if="entry.show" :to="{ path: `${entry.url}` }" class="menu-item">{{
         entry.name
       }}</router-link>
     </div>
@@ -14,7 +14,7 @@
     <draggable v-if="menu" :list="menu.entries" handle=".handle" class="menu-items" @end="updateLocations">
       <span v-for="item in menu.entries" :key="item.name">
         <i class="handle">icon</i>
-        <router-link :to="{ path: `${item.url}` }">{{
+        <router-link :to="{ path: `${item.url}` }" class="menu-item">{{
           item.name
         }}</router-link>
       </span>
@@ -232,19 +232,29 @@ export default {
 </script>
 
 <style scoped>
+.nav-bar {
+  padding: 1em;
+  border-radius: 2px;
+}
 
 .logo {
   display: flex;
 }
 
 .title {
-  font-size: 32px;
+  font-size: 2em;
   margin: 0 5px;
 }
 
 .menu-items {
   display: flex;
   flex-direction: column;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: black;
+  font-size: 1.5em;
 }
 
 img {

@@ -1,0 +1,41 @@
+<template>
+  <div class="nav-bar">
+    <router-link
+      v-if="$store.state.username"
+      :to="{ path: `/user/${$store.state.username}` }"
+      class="menu-item"
+      >Profile</router-link
+    >
+    <router-link v-if="$store.state.username" to="/account" class="menu-item"
+      >Account Settings</router-link
+    >
+    <router-link v- to="/login" class="menu-item">Login</router-link>
+  </div>
+</template>
+
+
+<style scoped>
+.nav-bar {
+  padding: 1em;
+  border-radius: 2px;
+}
+
+.logo {
+  display: flex;
+}
+
+h1 {
+  font-size: 32px;
+  margin: 0 5px;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: black;
+  font-size: 1.5em;
+}
+
+img {
+  height: 32px;
+}
+</style>
