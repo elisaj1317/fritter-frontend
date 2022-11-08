@@ -15,6 +15,7 @@
     <textarea
       v-if="editing"
       class="content"
+      ref="content"
       :value="draft"
       @input="draft = $event.target.value"
     />
@@ -104,7 +105,24 @@ export default {
       if (this.freet.content === this.draft) {
         const error =
           "Error: Edited freet content should be different than current freet content.";
+        this.$refs.content.focus();
         this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
+        setTimeout(() => this.$delete(this.alerts, error), 3000);
+        return;
+      }
+
+      if (!this.draft.trim()) {
+        const error = "Error: Edited freet content must be at least one character long.";
+        this.$refs.content.focus();
+        this.$set(this.alerts, error, "error");
+        setTimeout(() => this.$delete(this.alerts, error), 3000);
+        return;
+      }
+
+      if (this.draft.length > 140) {
+        const error = "Error: Edited freet content must be no more than 140 characters.";
+        this.$refs.content.focus();
+        this.$set(this.alerts, error, "error");
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
       }

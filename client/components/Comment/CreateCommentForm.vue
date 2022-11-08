@@ -64,7 +64,7 @@ export default {
       // Error 400
       if (!this.content.trim()) {
         return {
-          message: "Error: Freet content must be at least one character long",
+          message: "Error: Comment content must be at least one character long",
           status: "error",
           focus: () => {
             this.$refs.content.focus();
@@ -75,7 +75,7 @@ export default {
       // Error 413
       if (this.content.length > 140) {
         return {
-          message: "Error: Freet content must be no more than 140 characters.",
+          message: "Error: Comment content must be no more than 140 characters.",
           status: "error",
           focus: () => {
             this.$refs.content.focus();
