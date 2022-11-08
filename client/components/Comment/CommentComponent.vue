@@ -23,8 +23,7 @@
     <textarea
       v-if="editing"
       class="content"
-      :value="draft"
-      @input="draft = $event.target.value"
+      v-model="draft"
     />
     <p v-else class="content">
       {{ comment.content }}
@@ -156,7 +155,7 @@ export default {
       }
 
       try {
-        const r = await fetch(`/api/comments/${this.freet._id}`, options);
+        const r = await fetch(`/api/comments/${this.comment._id}`, options);
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
@@ -187,6 +186,7 @@ export default {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
+  margin: 0.5em;
   background-color: #BCD8C1;
 
 }

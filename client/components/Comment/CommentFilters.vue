@@ -51,7 +51,7 @@ export default {
 
 div {
   display: flex;
-  gap: 2em;
+  gap: 0.5em;
 }
 
 </style>
