@@ -117,5 +117,6 @@ export default {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
+  background-color: #BCD8C1;
 }
 </style>

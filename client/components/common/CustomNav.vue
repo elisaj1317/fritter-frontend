@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav-bar">
+  <nav class="nav-bar menu-items">
     <div class="logo">
       <img src="../../public/logo.svg" />
       <h1 class="title">Fritter</h1>
@@ -249,6 +249,7 @@ export default {
 .menu-items {
   display: flex;
   flex-direction: column;
+  gap: 0.5em;
 }
 
 .menu-item {

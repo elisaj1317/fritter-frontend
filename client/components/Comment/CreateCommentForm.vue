@@ -110,6 +110,8 @@ form {
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  background-color: #BCD8C1;
+
 }
 
 div {

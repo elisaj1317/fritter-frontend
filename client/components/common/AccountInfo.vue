@@ -4,18 +4,21 @@
       v-if="$store.state.username"
       :to="{ path: `/user/${$store.state.username}` }"
       class="menu-item"
-      >Profile</router-link
+      >Your Profile</router-link
     >
     <router-link v-if="$store.state.username" to="/account" class="menu-item"
       >Account Settings</router-link
     >
-    <router-link v- to="/login" class="menu-item">Login</router-link>
+    <router-link v-else to="/login" class="menu-item">Login</router-link>
   </div>
 </template>
 
 
 <style scoped>
 .nav-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
   padding: 1em;
   border-radius: 2px;
 }
