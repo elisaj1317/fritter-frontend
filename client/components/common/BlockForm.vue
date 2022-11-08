@@ -4,16 +4,12 @@
 <template>
   <form @submit.prevent="submit">
     <h3>{{ title }}</h3>
-    <article
-      v-if="fields.length"
-    >
-      <div
-        v-for="field in fields"
-        :key="field.id"
-      >
+    <article v-if="fields.length">
+      <div v-for="field in fields" :key="field.id">
         <label :for="field.id">{{ field.label }}:</label>
         <textarea
           v-if="field.id === 'content'"
+          :ref="field.id"
           :name="field.id"
           :value="field.value"
           @input="field.value = $event.target.value"
@@ -24,15 +20,13 @@
           :name="field.id"
           :value="field.value"
           @input="field.value = $event.target.value"
-        >
+        />
       </div>
     </article>
     <article v-else>
       <p>{{ content }}</p>
     </article>
-    <button
-      type="submit"
-    >
+    <button type="submit">
       {{ title }}
     </button>
     <section class="alerts">
@@ -48,41 +42,57 @@
 </template>
 
 <script>
-
 export default {
-  name: 'BlockForm',
+  name: "BlockForm",
   data() {
     /**
      * Options for submitting this form.
      */
     return {
-      url: '', // Url to submit form to
-      method: 'GET', // Form request method
+      url: "", // Url to submit form to
+      method: "GET", // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission
     };
+  },
+  computed: {
+    canSubmit() {
+      return { status: "success", message: "", focus: () => {} };
+    },
   },
   methods: {
     async submit() {
       /**
-        * Submits a form with the specified options from data().
-        */
+       * Submits a form with the specified options from data().
+       */
+      if (this.canSubmit.status !== "success") {
+        this.$set(this.alerts, this.canSubmit.message, this.canSubmit.status);
+        this.canSubmit.focus();
+        setTimeout(
+          () => this.$delete(this.alerts, this.canSubmit.message),
+          3000
+        );
+        return;
+      }
+
       const options = {
         method: this.method,
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'same-origin' // Sends express-session credentials with request
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // Sends express-session credentials with request
       };
       if (this.hasBody) {
-        options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
-            const {id, value} = field;
-            field.value = '';
-            return [id, value];
-          })
-        ));
+        options.body = JSON.stringify(
+          Object.fromEntries(
+            this.fields.map((field) => {
+              const { id, value } = field;
+              field.value = "";
+              return [id, value];
+            })
+          )
+        );
       }
 
       try {
@@ -95,23 +105,26 @@ export default {
 
         if (this.setUsername) {
           const text = await r.text();
-          const res = text ? JSON.parse(text) : {user: null};
-          this.$store.commit('setUsername', res.user ? res.user.username : null);
+          const res = text ? JSON.parse(text) : { user: null };
+          this.$store.commit(
+            "setUsername",
+            res.user ? res.user.username : null
+          );
         }
 
         if (this.refreshFreets) {
-          this.$store.dispatch('refreshFreets');
+          this.$store.dispatch("refreshFreets");
         }
 
         if (this.callback) {
           this.callback();
         }
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -145,7 +158,7 @@ form h3 {
 }
 
 textarea {
-   font-family: inherit;
-   font-size: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }
 </style>
