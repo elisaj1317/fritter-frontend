@@ -20,5 +20,21 @@ export default {
       },
     };
   },
+  computed: {
+    canSubmit() {
+      const passwordRegex = /^\S+$/;
+      if (!passwordRegex.test(this.fields[0].value)) {
+        return {
+          status: "error",
+          message: "Error: Password must be a nonempty string.",
+          focus: () => {
+            this.$refs.password[0].focus();
+          },
+        };
+      }
+
+      return { status: "success" };
+    },
+  },
 };
 </script>

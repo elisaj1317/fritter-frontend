@@ -16,6 +16,7 @@
         />
         <input
           v-else
+          :ref="field.id"
           :type="field.id === 'password' ? 'password' : 'text'"
           :name="field.id"
           :value="field.value"

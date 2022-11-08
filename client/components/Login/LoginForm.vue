@@ -26,5 +26,32 @@ export default {
       },
     };
   },
+  computed: {
+    canSubmit() {
+      const usernameRegex = /^\w+$/i;
+      if (!usernameRegex.test(this.fields[0].value)) {
+        return {
+          status: "error",
+          message: "Error: Username must be a nonempty alphanumeric string.",
+          focus: () => {
+            this.$refs.username[0].focus();
+          },
+        };
+      }
+
+      const passwordRegex = /^\S+$/;
+      if (!passwordRegex.test(this.fields[1].value)) {
+        return {
+          status: "error",
+          message: "Error: Password must be a nonempty string.",
+          focus: () => {
+            this.$refs.password[0].focus();
+          },
+        };
+      }
+
+      return { status: "success" };
+    },
+  },
 };
 </script>
