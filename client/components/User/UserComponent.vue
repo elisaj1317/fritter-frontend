@@ -10,17 +10,21 @@
       "
     >
       <FollowButton
-        v-if="$store.state.username && (username !== $store.state.username)"
+        v-if="$store.state.username && username !== $store.state.username"
         @refreshFollowers="fetchFollowers"
         :username="username"
         :canFollow="canFollow()"
       />
 
-      <router-link v-if="showFollowData" :to="{ path: `/user/${username}/followers` }"
-        >{{followers.length}} Followers</router-link
+      <router-link
+        v-if="showFollowData"
+        :to="{ path: `/user/${username}/followers` }"
+        >{{ followers.length }} Followers</router-link
       >
-      <router-link v-if="showFollowData" :to="{ path: `/user/${username}/followings` }"
-        >{{followings.length}} Following</router-link
+      <router-link
+        v-if="showFollowData"
+        :to="{ path: `/user/${username}/followings` }"
+        >{{ followings.length }} Following</router-link
       >
     </div>
     <div v-else-if="loadingFollowers || loadingFollowings">
@@ -48,7 +52,7 @@ export default {
     showFollowData: {
       type: Boolean,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -70,10 +74,8 @@ export default {
   },
   methods: {
     canFollow() {
-      return (
-        this.followers.filter(
-          (follow) => follow.followee == this.$store.state.username
-        ).length == 0
+      return !this.followers.find(
+        (follow) => follow.followee == this.$store.state.username
       );
     },
     async fetchFollowings() {
@@ -117,6 +119,6 @@ export default {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
-  background-color: #BCD8C1;
+  background-color: #bcd8c1;
 }
 </style>

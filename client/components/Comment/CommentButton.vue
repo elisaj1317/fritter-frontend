@@ -1,7 +1,7 @@
 <!-- Component for commenting on freets -->
 <template>
   <span>
-    <img src="https://www.svgrepo.com/show/357540/comment.svg"  @click="redirectToComments" />
+    <img src="images/chat.svg"  @click="redirectToComments" />
   </span>
 </template>
 

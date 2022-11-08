@@ -1,10 +1,8 @@
 <!-- Component for liking freets/comments (inline style) -->
 <template>
-  <span v-if="$store.state.username">
-    <button type="submit" @click="submit">
-      {{ buttonText }}
-    </button>
-    <span> {{ likedCopy.numLikes }} </span>
+  <span v-if="$store.state.username" class="like">
+    <img :src="likeSrc" @click="submit"/>
+    <span> {{ likedObject.numLikes }} </span>
   </span>
 </template>
 
@@ -27,38 +25,35 @@ export default {
     return {
       justLiked: false, // no longer need to wait for like refresh to return for button to update
       justUnliked: false, // no longer need to wait for like refresh to return for button to update
-      likedCopy: this.likedObject,
       alerts: {},
     };
   },
   computed: {
     canLike() {
       if (this.isFreet) {
-        return !(
-          this.$store.state.likedFreets.filter(
-            (liked) => liked._id == this.likedCopy._id
-          ).length > 0
+        return !this.$store.state.likedFreets.find(
+          (liked) => liked._id == this.likedObject._id
         );
       }
       return !(
         this.$store.state.likedComments.filter(
-          (liked) => liked._id == this.likedCopy._id
+          (liked) => liked._id == this.likedObject._id
         ).length > 0
       );
     },
-    buttonText() {
-      // determines text based on canLike
+    likeSrc() {
+      // determines image based on canLike
       if (this.justUnliked || (!this.justLiked && this.canLike)) {
-        return "Like";
+        return "images/heart.svg";
       }
-      return "Unlike";
+      return "images/heart-fill.svg";
     },
   },
   methods: {
     async submit() {
       const url = this.isFreet
-        ? `/api/likes/freet/${this.likedCopy._id}`
-        : `/api/likes/comment/${this.likedCopy._id}`;
+        ? `/api/likes/freet/${this.likedObject._id}`
+        : `/api/likes/comment/${this.likedObject._id}`;
 
       const options = {};
       if (this.canLike) {
@@ -75,11 +70,11 @@ export default {
         }
 
         if (this.canLike) {
-          this.likedCopy.numLikes += 1;
+          this.likedObject.numLikes += 1;
           this.justLiked = true;
           this.justUnliked = false;
         } else {
-          this.likedCopy.numLikes -= 1;
+          this.likedObject.numLikes -= 1;
           this.justLiked = false;
           this.justUnliked = true;
         }
@@ -97,3 +92,24 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.like {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+img {
+  width: 1.5em;
+  height: 1.5em;
+  filter: invert(31%) sepia(43%) saturate(1863%) hue-rotate(155deg) brightness(100%) contrast(101%);
+  cursor: pointer;
+}
+
+.like > span {
+  color: #007991;
+  font-size: 1em;
+}
+</style>

@@ -167,7 +167,7 @@ export default {
 
 .actions {
   display: flex;
-  align-content: center;
-  gap: 1em;
+  align-items: center;
+  gap: 1.25em;
 }
 </style>
